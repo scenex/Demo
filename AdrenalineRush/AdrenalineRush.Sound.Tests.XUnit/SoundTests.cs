@@ -35,7 +35,6 @@ namespace AdrenalineRush.Sound.Tests.XUnit
 
             string expected = "supersong.wav";
 
-
             this.soundBassMock.Object.Init();
             this.soundBassMock.Object.Load(expected);
 
