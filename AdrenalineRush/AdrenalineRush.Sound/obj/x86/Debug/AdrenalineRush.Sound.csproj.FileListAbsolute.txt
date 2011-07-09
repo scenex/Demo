@@ -1,0 +1,14 @@
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush.Sound\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush.Sound\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush.Sound\bin\x86\Debug\AdrenalineRush.Sound.dll
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush.Sound\bin\x86\Debug\AdrenalineRush.Sound.pdb
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush.Sound\obj\x86\Debug\AdrenalineRush.Sound.dll
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush.Sound\obj\x86\Debug\AdrenalineRush.Sound.pdb
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush\AdrenalineRush.Sound\bin\x86\Debug\AdrenalineRush.Sound.dll
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush\AdrenalineRush.Sound\bin\x86\Debug\AdrenalineRush.Sound.pdb
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush\AdrenalineRush.Sound\bin\x86\Debug\Bass.Net.dll
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush\AdrenalineRush.Sound\bin\x86\Debug\Bass.Net.xml
+C:\Users\scenex\Documents\Visual Studio 2010\Projects\AdrenalineRush\AdrenalineRush\AdrenalineRush.Sound\bin\x86\Debug\bass.dll
+C:\Users\scenex\Documents\Visual Studio 2010\AdrenalineRush\bin\x86\Debug\bass.dll
+C:\Users\scenex\Documents\Visual Studio 2010\AdrenalineRush\bin\x86\Debug\AdrenalineRush.Sound.dll
+C:\Users\scenex\Documents\Visual Studio 2010\AdrenalineRush\bin\x86\Debug\AdrenalineRush.Sound.pdb

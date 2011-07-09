@@ -1,0 +1,9 @@
+<Modules>
+  <Module PersistentId="d:Miscellaneous Files" ModuleId="System.Windows.Forms" />
+  <Module PersistentId="70ECC788-508D-4103-8AFA-E4D3C0567D55" ModuleId="AdrenalineRush" />
+  <Module PersistentId="86079AFD-85C0-42D4-BC9A-2B70B0555E26" ModuleId="AdrenalineRushContent" />
+  <Module PersistentId="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553" ModuleId="Microsoft.Xna.Framework.Game" />
+  <Module PersistentId="6B93A9FB-6C53-4749-823A-0EA4D17FE139" ModuleId="AdrenalineRush.Sound" />
+  <Module PersistentId="2C88D493-C97B-4970-B64D-30F1D4716D02" ModuleId="AdrenalineRush.Sound.Tests.XUnit" />
+  <Module PersistentId="Bass.Net, Version=2.4.7.4, Culture=neutral, PublicKeyToken=b7566c273e6ef480" ModuleId="Bass.Net" />
+</Modules>

@@ -1,0 +1,165 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectTVNoise.cs" caret="499" fromTop="19" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/f:Program.cs" caret="204" fromTop="9" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:GeometricPrimitives/f:CylinderPrimitive.cs" caret="488" fromTop="4" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:GeometricPrimitives/f:VertexPositionNormal.cs" caret="476" fromTop="4" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:GeometricPrimitives/f:CubePrimitive.cs" caret="1472" fromTop="32" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:GeometricPrimitives/f:GeometricPrimitive.cs" caret="4072" fromTop="28" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectBeginning.cs" caret="0" fromTop="0" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectCube.cs" caret="1839" fromTop="18" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectTunnel.cs" caret="316" fromTop="0" />
+      <File id="86079AFD-85C0-42D4-BC9A-2B70B0555E26/d:Shaders/f:PS_Fade.fx" caret="0" fromTop="0" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:ISound.cs" caret="342" fromTop="17" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/f:Demo.cs" caret="1757" fromTop="17" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="1942" fromTop="0" />
+      <File id="2C88D493-C97B-4970-B64D-30F1D4716D02/f:SoundTests.cs" caret="823" fromTop="17" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="459" fromTop="22" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="2101" fromTop="16" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="319" fromTop="15" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="1898" fromTop="22" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="1808" fromTop="17" />
+      <File id="2C88D493-C97B-4970-B64D-30F1D4716D02/f:SoundTests.cs" caret="1263" fromTop="21" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="1628" fromTop="12" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectCube.cs" caret="1839" fromTop="18" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectTunnel.cs" caret="7081" fromTop="16" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectTunnel.cs" caret="7331" fromTop="15" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectTunnel.cs" caret="7643" fromTop="21" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectTunnel.cs" caret="7913" fromTop="19" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/d:DemoEffects/f:DemoEffectTunnel.cs" caret="8065" fromTop="18" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/f:Demo.cs" caret="2394" fromTop="21" />
+      <File id="70ECC788-508D-4103-8AFA-E4D3C0567D55/f:Demo.cs" caret="1623" fromTop="14" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:ISound.cs" caret="101" fromTop="6" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:ISound.cs" caret="393" fromTop="8" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:ISound.cs" caret="589" fromTop="21" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="3591" fromTop="10" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="3567" fromTop="25" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="653" fromTop="21" />
+      <File id="2C88D493-C97B-4970-B64D-30F1D4716D02/f:SoundTests.cs" caret="613" fromTop="15" />
+      <File id="2C88D493-C97B-4970-B64D-30F1D4716D02/f:SoundTests.cs" caret="515" fromTop="10" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:ISound.cs" caret="259" fromTop="13" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="116" fromTop="6" />
+      <File id="6B93A9FB-6C53-4749-823A-0EA4D17FE139/f:SoundBASS.cs" caret="883" fromTop="13" />
+      <File id="2C88D493-C97B-4970-B64D-30F1D4716D02/f:SoundTests.cs" caret="94" fromTop="5" />
+      <File id="2C88D493-C97B-4970-B64D-30F1D4716D02/f:SoundTests.cs" caret="291" fromTop="16" />
+      <File id="2C88D493-C97B-4970-B64D-30F1D4716D02/f:SoundTests.cs" caret="877" fromTop="21" />
+      <File id="2C88D493-C97B-4970-B64D-30F1D4716D02/f:SoundTests.cs" caret="1098" fromTop="25" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir>D:\Program Files\NUnit 2.5.10\bin\net-2.0\</NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="Effect`0" priority="1" />
+      <Item value="basicEffect" priority="2" />
+      <Item value="world" priority="1" />
+      <Item value="view" priority="0" />
+      <Item value="projection" priority="1" />
+      <Item value="new" priority="1" />
+      <Item value="Effect" priority="0" />
+      <Item value="graphicsDevice" priority="0" />
+      <Item value="currentPrimitive" priority="0" />
+      <Item value="shader" priority="1" />
+      <Item value="game" priority="0" />
+      <Item value="DisplayMode`0" priority="0" />
+      <Item value="DisplayMode" priority="0" />
+      <Item value="SurfaceFormat`0" priority="0" />
+      <Item value="displayMode" priority="0" />
+      <Item value="public" priority="1" />
+      <Item value="void" priority="7" />
+      <Item value="ISound`0" priority="0" />
+      <Item value="int" priority="1" />
+      <Item value="ctor" priority="2" />
+      <Item value="fact" priority="0" />
+      <Item value="soundManager" priority="3" />
+      <Item value="string" priority="3" />
+      <Item value="true" priority="2" />
+      <Item value="return" priority="2" />
+      <Item value="PathLoadSuccessful" priority="0" />
+      <Item value="value" priority="0" />
+      <Item value="NullReferenceException`0" priority="0" />
+      <Item value="SoundBASS`0" priority="1" />
+      <Item value="bool" priority="6" />
+      <Item value="false" priority="1" />
+      <Item value="actual" priority="0" />
+      <Item value="this" priority="10" />
+      <Item value="fileLoaded" priority="0" />
+      <Item value="if" priority="0" />
+      <Item value="private" priority="0" />
+      <Item value="subsystemInitialized" priority="0" />
+      <Item value="libraryInitialized" priority="2" />
+      <Item value="fileHandle" priority="0" />
+      <Item value="else" priority="0" />
+      <Item value="Mock&lt;Bass&gt;" priority="0" />
+      <Item value="soundBassMock" priority="0" />
+      <Item value="x" priority="1" />
+      <Item value="XnaImaging" priority="0" />
+      <Item value="BASS_TAG_APE_BINARY`0" priority="0" />
+      <Item value="y" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Microsoft.Xna.Framework.Graphics.Effect">
+      <Item value="Parameters" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Microsoft.Xna.Framework.Graphics.EffectParameter">
+      <Item value="SetValue`0" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdrenalineRush.GeometricPrimitives.GeometricPrimitive">
+      <Item value="Draw`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Microsoft.Xna.Framework.Game">
+      <Item value="Content" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Microsoft.Xna.Framework.Content.ContentManager">
+      <Item value="Load`1" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Microsoft.Xna.Framework.Color">
+      <Item value="White" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@Microsoft.Xna.Framework.Graphics.SurfaceFormat">
+      <Item value="Color" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdrenalineRush.Sound.SoundBASS">
+      <Item value="Init`0" priority="0" />
+      <Item value="Load`0" priority="1" />
+      <Item value="fileLoaded" priority="1" />
+      <Item value="fileHandle" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:FluentAssertions.Assertions.BooleanAssertions">
+      <Item value="BeTrue`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdrenalineRush.Sound.Tests.XUnit.SoundTests">
+      <Item value="soundBass" priority="0" />
+      <Item value="soundBassMock" priority="7" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Moq.Mock`1">
+      <Item value="Object" priority="3" />
+      <Item value="Setup`1" priority="2" />
+      <Item value="SetupAllProperties`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:AdrenalineRush.Sound.ISound">
+      <Item value="Init`0" priority="4" />
+      <Item value="Load`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:Moq.Language.Flow.ISetup`1">
+      <Item value="Invoking`1" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>
