@@ -145,6 +145,5 @@ namespace AdrenalineRush.Sound
         }
 
         #endregion
-
     }
 }

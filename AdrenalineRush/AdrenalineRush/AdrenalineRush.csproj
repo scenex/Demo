@@ -145,16 +145,6 @@
     <None Include="StartupForm\Resources\StartupLogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AdrenalineRush.Sound\AdrenalineRush.Sound.csproj">
-      <Project>{6B93A9FB-6C53-4749-823A-0EA4D17FE139}</Project>
-      <Name>AdrenalineRush.Sound</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AdrenalineRushContent\AdrenalineRushContent.contentproj">
-      <Name>AdrenalineRushContent</Name>
-      <XnaReferenceType>Content</XnaReferenceType>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
@@ -191,6 +181,17 @@
       <DependentUpon>StartupScreen.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AdrenalineRush.Sound\AdrenalineRush.Sound.csproj">
+      <Project>{6B93A9FB-6C53-4749-823A-0EA4D17FE139}</Project>
+      <Name>AdrenalineRush.Sound</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AdrenalineRushContent\AdrenalineRushContent.contentproj">
+      <Project>{86079AFD-85C0-42D4-BC9A-2B70B0555E26}</Project>
+      <Name>AdrenalineRushContent %28Content%29</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

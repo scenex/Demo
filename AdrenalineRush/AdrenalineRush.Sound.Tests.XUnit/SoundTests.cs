@@ -1,100 +1,90 @@
+﻿using AdrenalineRush.Sound;
 
-namespace AdrenalineRush.Sound.Tests.XUnit
+using FluentAssertions;
+using Moq;
+using Xunit;
+
+public class SoundTests
 {
-    using FluentAssertions;
+    ISound soundBass;
 
-    using Moq;
-    using Un4seen.Bass;
-    using Xunit;
+    Mock<ISound> soundBassMock;
 
-    public class SoundTests
+    public SoundTests()
     {
-        ISound soundBass;
+        this.soundBass = new SoundBASS();
+        this.soundBassMock = new Mock<ISound>();
+        this.soundBassMock.SetupAllProperties();
+    }
 
-        /// <summary>
-        /// sdsd ddd ssss ss
-        /// </summary>
-        Mock<ISound> soundBassMock;
+    [Fact]
+    public void Sound_WhenLoad_ThenLoadSoundFile()
+    {
+        this.soundBass.Init();
 
-        public SoundTests()
-        {
-            this.soundBass = new SoundBASS();
-            this.soundBassMock = new Mock<ISound>();
-            this.soundBassMock.SetupAllProperties();
-        }
+        this.soundBass.Load("music.wav");
 
-        [Fact]
-        public void Sound_WhenLoad_ThenLoadSoundFile()
-        {
-            //this.soundBass.Init();
-            
-            //this.soundBass.Load("demomusic.wav");
+        this.soundBass.FileLoaded.Should().BeTrue();
+        this.soundBass.Dispose();
 
-            //this.soundBass.FileLoaded.Should().BeTrue();
-            //this.soundBass.Dispose();
+        //this.soundBassMock.Object.Init();
+        //this.soundBassMock.Object.Load("music.wav");
 
-            string expected = "supersong.wav";
+        //this.soundBassMock.Object.FileLoaded.Should().BeTrue();
+        //this.soundBassMock.Object.Dispose();
+    }
 
+    [Fact]
+    public void Sound_WhenPlay_ThenPlaySoundFile()
+    {
+        this.soundBass.Init();
+        this.soundBass.Load("music.wav");
 
-            this.soundBassMock.Object.Init();
-            this.soundBassMock.Object.Load(expected);
+        this.soundBass.Play();
 
-            this.soundBassMock.Object.FileLoaded.Should().BeTrue();
-            this.soundBassMock.Object.Dispose();
-        }
+        this.soundBass.PlaybackStarted.Should().BeTrue();
+        this.soundBass.Dispose();
+    }
 
-        [Fact]
-        public void Sound_WhenPlay_ThenPlaySoundFile()
-        {
-            this.soundBass.Init();
-            this.soundBass.Load("demomusic.wav");
+    [Fact]
+    public void Sound_WhenStop_ThenStopPlayback()
+    {
+        this.soundBass.Init();
+        this.soundBass.Load("music.wav");
+        this.soundBass.Play();
 
-            this.soundBass.Play();
+        this.soundBass.Stop();
 
-            this.soundBass.PlaybackStarted.Should().BeTrue();
-            this.soundBass.Dispose();
-        }
+        this.soundBass.PlaybackStarted.Should().BeFalse();
+        this.soundBass.Dispose();
+    }
 
-        [Fact]
-        public void Sound_WhenStop_ThenStopPlayback()
-        {
-            this.soundBass.Init();
-            this.soundBass.Load("demomusic.wav");
-            this.soundBass.Play();
+    [Fact]
+    public void Sound_WhenPause_ThenPausePlayback()
+    {
+        this.soundBass.Init();
+        this.soundBass.Load("music.wav");
 
-            this.soundBass.Stop();
+        this.soundBass.Play();
 
-            this.soundBass.PlaybackStarted.Should().BeFalse();
-            this.soundBass.Dispose();
-        }
+        this.soundBass.Pause();
 
-        [Fact]
-        public void Sound_WhenPause_ThenPausePlayback()
-        {
-            this.soundBass.Init();
-            this.soundBass.Load("demomusic.wav");
+        this.soundBass.PlaybackPaused.Should().BeTrue();
+        this.soundBass.Dispose();
+    }
 
-            this.soundBass.Play();
+    [Fact]
+    public void Sound_WhenSeek_ThenSeekGivenPosition()
+    {
+        this.soundBass.Init();
+        this.soundBass.Load("music.wav");
 
-            this.soundBass.Pause();
+        double expected = 3.0;
 
-            this.soundBass.PlaybackPaused.Should().BeTrue();
-            this.soundBass.Dispose();
-        }
+        this.soundBass.Play();
+        this.soundBass.Seek(expected);
 
-        [Fact]
-        public void Sound_WhenSeek_ThenSeekGivenPosition()
-        {
-            this.soundBass.Init();
-            this.soundBass.Load("demomusic.wav");
-
-            double expected = 3.0;
-            
-            this.soundBass.Play();
-            this.soundBass.Seek(expected);
-
-            this.soundBass.CurrentSongPosition.Should().BeGreaterOrEqualTo(expected);
-            this.soundBass.Dispose();
-        }
+        this.soundBass.CurrentSongPosition.Should().BeGreaterOrEqualTo(expected);
+        this.soundBass.Dispose();
     }
 }
