@@ -38,11 +38,17 @@ namespace AdrenalineRush.DemoEffects
 
         KeyboardState previousKeyboardState;
 
+        private int demoEffectDuration;
+        private float currentAbsolutePosition;
+
         public DemoEffectTunnel(Game game) : base(game)
         {
             this.game = game;
             graphics = (GraphicsDeviceManager)this.game.Services.GetService(typeof(IGraphicsDeviceManager));
             isDemoEffectStarting = true;
+
+            this.Enabled = false;
+            this.Visible = false;
         }
         
         public override void Initialize()
@@ -74,7 +80,8 @@ namespace AdrenalineRush.DemoEffects
 
         public override void Update(GameTime gameTime)
         {
-            cameraAxisZ++;
+            cameraAxisZ = (currentAbsolutePosition / demoEffectDuration) * 3629;
+
             cameraSpeedMultiplier += 0.0001f;
 
             if (isDemoEffectStarting == true)
@@ -181,12 +188,15 @@ namespace AdrenalineRush.DemoEffects
             base.Draw(gameTime);           
         }
 
-        public void RunDemoEffect(TimeSpan gameTime, int startTime, int endTime)
+        public void RunDemoEffect(TimeSpan timeLine, int startTime, int endTime)
         {
-            if (((int)gameTime.TotalMilliseconds > startTime) && ((int)gameTime.TotalMilliseconds < endTime))
+            if (((int)timeLine.TotalMilliseconds > startTime) && ((int)timeLine.TotalMilliseconds < endTime))
             {
                 this.Enabled = true;
                 this.Visible = true;
+
+                demoEffectDuration = endTime - startTime;
+                currentAbsolutePosition = (float)timeLine.TotalMilliseconds - startTime;
 
                 //Insert screen flashes here
 

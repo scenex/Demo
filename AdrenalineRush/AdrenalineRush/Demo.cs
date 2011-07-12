@@ -21,15 +21,17 @@ namespace AdrenalineRush
         TimeSpan elapsedTime = TimeSpan.Zero;
         TimeSpan timeLine = TimeSpan.Zero;
 
-        ISound sounds;
+        ISound sound;
 
         DemoEffectBeginning demoEffectBeginning;
         DemoEffectTunnel demoEffectTunnel;
 
+        private bool isDemoPaused;
+
         public Demo()
         {
             graphics = new GraphicsDeviceManager(this);
-            sounds = new SoundBASS();
+            this.sound = new SoundBASS();
 
             Content.RootDirectory = "Content";
 
@@ -49,8 +51,10 @@ namespace AdrenalineRush
 
             //Resolution.SetResolution(1680, 1050, false);
 
-            sounds.Init();
-            
+            this.sound.Init();
+            //this.sound.Load("music.wav");
+            //this.sound.Play();
+
             graphics.PreferMultiSampling = false;
             graphics.SynchronizeWithVerticalRetrace = false;
             graphics.PreferredBackBufferWidth = workingResolutionWidth;
@@ -70,8 +74,8 @@ namespace AdrenalineRush
 
         protected override void LoadContent()
         {
-            sounds.Load("heartbeats.wav");
-            sounds.Play();
+            this.sound.Load("music.wav");
+            this.sound.Play();
 
             base.LoadContent();
         }
@@ -89,10 +93,17 @@ namespace AdrenalineRush
                 this.Exit();
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                timeLine = TimeSpan.Zero;
-         
+            {
+                this.isDemoPaused = this.isDemoPaused != true;
+            }
+                       
             elapsedTime += gameTime.ElapsedGameTime;
-            timeLine += gameTime.ElapsedGameTime;
+
+            if (isDemoPaused == false)
+            {
+                timeLine += gameTime.ElapsedGameTime;
+            }
+            
 
             // FPS
             if (elapsedTime > TimeSpan.FromSeconds(1))
@@ -102,21 +113,20 @@ namespace AdrenalineRush
                 frameCounter = 0;
             }
 
+            GameTime temp = new GameTime(timeLine, elapsedTime);
 
-            
-                     
-            base.Update(gameTime);
+            base.Update(temp);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             frameCounter++;
-            this.Window.Title = "GameTime: " + ((int)gameTime.TotalGameTime.TotalMilliseconds).ToString() + " || Time Line: " + ((int)timeLine.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
+            this.Window.Title = "Time Line: " + ((int)timeLine.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
 
             GraphicsDevice.Clear(Color.Black);
 
             demoEffectBeginning.RunDemoEffect(timeLine, 0, 2500);
-            demoEffectTunnel.RunDemoEffect(timeLine, 2501, 200000);
+            demoEffectTunnel.RunDemoEffect(timeLine, 2501, 63000);
 
             base.Draw(gameTime);
         }
