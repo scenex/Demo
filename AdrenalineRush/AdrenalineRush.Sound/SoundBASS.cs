@@ -57,6 +57,7 @@ namespace AdrenalineRush.Sound
             {
                 if (fileHandle != 0)
                 {
+                    DisableSplashScreen();
                     return Bass.BASS_ChannelBytes2Seconds(fileHandle, Bass.BASS_ChannelGetPosition(fileHandle, BASSMode.BASS_POS_BYTES));
                 }
 
@@ -70,6 +71,7 @@ namespace AdrenalineRush.Sound
             {
                 if (fileHandle != 0)
                 {
+                    DisableSplashScreen();
                     return (int)Bass.BASS_ChannelBytes2Seconds(fileHandle, Bass.BASS_ChannelGetLength(fileHandle, BASSMode.BASS_POS_BYTES)) * 1000;
                 }
 
@@ -83,11 +85,13 @@ namespace AdrenalineRush.Sound
 
         public void Init()
         {
+            DisableSplashScreen();
             libraryInitialized = Bass.BASS_Init(-1, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
         }
 
         public void Load(string path)
-        {           
+        {
+            DisableSplashScreen();
             fileHandle = Bass.BASS_StreamCreateFile(path, 0, 0, BASSFlag.BASS_DEFAULT);
       
             if (libraryInitialized == true && (fileHandle != 0))
@@ -102,6 +106,7 @@ namespace AdrenalineRush.Sound
 
         public void Play()
         {
+            DisableSplashScreen();
             if (Bass.BASS_ChannelPlay(fileHandle, false))
             {
                 this.playbackStarted = true;
@@ -117,6 +122,7 @@ namespace AdrenalineRush.Sound
         {
             if (fileHandle != 0)
             {
+                DisableSplashScreen();
                 Bass.BASS_ChannelPause(fileHandle);
                 this.playbackPaused = true;
             }
@@ -126,6 +132,7 @@ namespace AdrenalineRush.Sound
         {
             if (fileHandle != 0)
             {
+                DisableSplashScreen();
                 Bass.BASS_ChannelStop(fileHandle);
                 this.playbackStarted = false;                
             }           
@@ -135,13 +142,20 @@ namespace AdrenalineRush.Sound
         {
             if (fileHandle != 0)
             {
+                DisableSplashScreen();
                 Bass.BASS_ChannelSetPosition(fileHandle, position);
             }            
         }
 
         public void Dispose()
         {
+            DisableSplashScreen();
             Bass.BASS_Free();
+        }
+
+        private void DisableSplashScreen()
+        {
+            BassNet.Registration("thomas_kudlacek@hotmail.com", "2X18312027312422");
         }
 
         #endregion

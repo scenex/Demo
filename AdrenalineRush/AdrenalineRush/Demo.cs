@@ -6,7 +6,12 @@ namespace AdrenalineRush
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
     using AdrenalineRush.DemoEffects;
+
+    using Nuclex.Input;
+    using Nuclex.UserInterface;
+
     using Sound;
+
     public class Demo : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
@@ -26,13 +31,21 @@ namespace AdrenalineRush
         DemoEffectBeginning demoEffectBeginning;
         DemoEffectTunnel demoEffectTunnel;
 
+        private GuiManager guiManager;
+        private InputManager inputManager;
+
         private bool isDemoPaused;
+
+        private Screen mainScreen;
 
         public Demo()
         {
             graphics = new GraphicsDeviceManager(this);
             this.sound = new SoundBASS();
 
+            this.guiManager = new GuiManager(this.Services);
+            this.inputManager = new InputManager(this.Services);
+            
             Content.RootDirectory = "Content";
 
             //Resolution.Init(ref graphics);
@@ -52,8 +65,6 @@ namespace AdrenalineRush
             //Resolution.SetResolution(1680, 1050, false);
 
             this.sound.Init();
-            //this.sound.Load("music.wav");
-            //this.sound.Play();
 
             graphics.PreferMultiSampling = false;
             graphics.SynchronizeWithVerticalRetrace = false;
@@ -68,6 +79,15 @@ namespace AdrenalineRush
 
             this.Components.Add(demoEffectBeginning);
             this.Components.Add(demoEffectTunnel);
+
+            this.Components.Add(this.guiManager);
+            this.Components.Add(this.inputManager);
+            
+            this.IsMouseVisible = true;
+            mainScreen = new Screen(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            this.guiManager.Screen = mainScreen;
+
+            mainScreen.Desktop.Children.Add(new DemoController());
 
             base.Initialize();
         }
@@ -88,9 +108,11 @@ namespace AdrenalineRush
 
 
         protected override void Update(GameTime gameTime)
-        {        
+        {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 this.Exit();
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
@@ -102,8 +124,15 @@ namespace AdrenalineRush
             if (isDemoPaused == false)
             {
                 timeLine += gameTime.ElapsedGameTime;
+                if (sound.PlaybackPaused)
+                {
+                    sound.Play();
+                }
             }
-            
+            else
+            {
+                sound.Pause();
+            }
 
             // FPS
             if (elapsedTime > TimeSpan.FromSeconds(1))
@@ -113,13 +142,13 @@ namespace AdrenalineRush
                 frameCounter = 0;
             }
 
-            GameTime temp = new GameTime(timeLine, elapsedTime);
-
-            base.Update(temp);
+            base.Update(new GameTime(timeLine, elapsedTime));
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            guiManager.Draw(gameTime);
+
             frameCounter++;
             this.Window.Title = "Time Line: " + ((int)timeLine.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
 
