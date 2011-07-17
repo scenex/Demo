@@ -15,29 +15,39 @@ namespace AdrenalineRush
 
     partial class DemoController
     {
-        private LabelControl helloWorldLabel;
+        private LabelControl lblSeek;
 
-        private ButtonControl okButton;
+        private ButtonControl btnPlayPause;
 
-        private ButtonControl cancelButton;
+        private ButtonControl btnClose;
+
+        private InputControl txtSeek;
 
         private void InitializeComponent()
         {
-            this.helloWorldLabel = new Nuclex.UserInterface.Controls.LabelControl();
-            this.okButton = new Nuclex.UserInterface.Controls.Desktop.ButtonControl();
-            this.cancelButton = new Nuclex.UserInterface.Controls.Desktop.ButtonControl();
+            this.Title = "Timeline Controller";
+            this.lblSeek = new LabelControl();
 
-            this.helloWorldLabel.Text = "Hello World! This is a label.";
-            this.helloWorldLabel.Bounds = new UniRectangle(10.0f, 15.0f, 110.0f, 30.0f);
+            this.btnPlayPause = new ButtonControl();
+            this.btnClose = new ButtonControl();
 
-            this.okButton.Bounds = new UniRectangle(new UniScalar(1.0f, -180.0f), new UniScalar(1.0f, -40.0f), 80, 24);
-
-            this.cancelButton.Bounds = new UniRectangle(new UniScalar(1.0f, -90.0f), new UniScalar(1.0f, -40.0f), 80, 24);
+            this.txtSeek = new InputControl();
 
             this.Bounds = new UniRectangle(100.0f, 100.0f, 512.0f, 384.0f);
-            Children.Add(this.helloWorldLabel);
-            Children.Add(this.okButton);
-            Children.Add(this.cancelButton);
+
+            this.lblSeek.Text = "Seek to: ";
+            this.lblSeek.Bounds = new UniRectangle(10.0f, 45.0f, 110.0f, 30.0f);
+            this.btnPlayPause.Bounds = new UniRectangle(new UniScalar(1.0f, -180.0f), new UniScalar(1.0f, -40.0f), 80, 24);
+            this.btnClose.Bounds = new UniRectangle(new UniScalar(1.0f, -90.0f), new UniScalar(1.0f, -40.0f), 80, 24);
+            
+            this.txtSeek.Bounds = new UniRectangle(10.0f, 80.0f, 100, 20);
+            this.btnPlayPause.Text = "Play";
+            this.btnClose.Text = "Close";
+            
+            Children.Add(this.lblSeek);
+            Children.Add(this.btnPlayPause);
+            Children.Add(this.btnClose);
+            Children.Add(this.txtSeek);
         }
     }
 }
