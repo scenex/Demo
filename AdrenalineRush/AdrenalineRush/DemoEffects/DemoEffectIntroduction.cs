@@ -8,15 +8,17 @@ namespace AdrenalineRush.DemoEffects
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class DemoEffectBeginning : Microsoft.Xna.Framework.DrawableGameComponent
+    public class DemoEffectIntroduction : Microsoft.Xna.Framework.DrawableGameComponent
     {
         private SpriteBatch spriteBatch;
 
-        private SpriteFont spriteFont;
+        private Texture2D texture;
 
-        public DemoEffectBeginning(Game game) : base(game)
+        private GraphicsDeviceManager graphics;
+
+        public DemoEffectIntroduction(Game game) : base(game)
         {
-            // TODO: Construct any child components here
+            graphics = (GraphicsDeviceManager)game.Services.GetService(typeof(IGraphicsDeviceManager));
         }
 
         public override void Initialize()
@@ -27,7 +29,7 @@ namespace AdrenalineRush.DemoEffects
 
         protected override void LoadContent()
         {
-            spriteFont = Game.Content.Load<SpriteFont>(@"SpriteFonts\Font");
+            texture = Game.Content.Load<Texture2D>(@"Pictures\Resurrection");
             base.LoadContent();
         }
 
@@ -41,7 +43,7 @@ namespace AdrenalineRush.DemoEffects
         public override void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
-            spriteBatch.DrawString(spriteFont, "Demo Intro Screen (title, heartbeats, white noise)", new Vector2(100, 50), Color.White);
+            spriteBatch.Draw(texture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
 
             base.Draw(gameTime);

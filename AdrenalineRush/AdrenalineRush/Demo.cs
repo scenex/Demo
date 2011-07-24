@@ -28,7 +28,7 @@ namespace AdrenalineRush
 
         ISound sound;
 
-        DemoEffectBeginning demoEffectBeginning;
+        DemoEffectIntroduction demoEffectIntroduction;
         DemoEffectTunnel demoEffectTunnel;
 
         private GuiManager guiManager;
@@ -74,10 +74,10 @@ namespace AdrenalineRush
           
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            demoEffectBeginning = new DemoEffectBeginning(this);
+            this.demoEffectIntroduction = new DemoEffectIntroduction(this);
             demoEffectTunnel = new DemoEffectTunnel(this);
 
-            this.Components.Add(demoEffectBeginning);
+            this.Components.Add(this.demoEffectIntroduction);
             this.Components.Add(demoEffectTunnel);
 
             this.Components.Add(this.guiManager);
@@ -85,9 +85,10 @@ namespace AdrenalineRush
             
             this.IsMouseVisible = true;
             mainScreen = new Screen(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-            this.guiManager.Screen = mainScreen;
-
             mainScreen.Desktop.Children.Add(new DemoController());
+            
+            this.guiManager.Screen = mainScreen;
+            this.guiManager.Visible = false;
 
             base.Initialize();
         }
@@ -154,8 +155,8 @@ namespace AdrenalineRush
 
             GraphicsDevice.Clear(Color.Black);
 
-            demoEffectBeginning.RunDemoEffect(timeLine, 0, 2500);
-            demoEffectTunnel.RunDemoEffect(timeLine, 2501, 63000);
+            this.demoEffectIntroduction.RunDemoEffect(timeLine, 0, 5000);
+            this.demoEffectTunnel.RunDemoEffect(timeLine, 5001, 63000);
 
             base.Draw(gameTime);
         }

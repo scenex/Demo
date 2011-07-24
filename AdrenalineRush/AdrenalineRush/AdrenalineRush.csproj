@@ -121,7 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoController.cs" />
-    <Compile Include="DemoEffects\DemoEffectBeginning.cs" />
+    <Compile Include="DemoEffects\DemoEffectIntroduction.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="DemoEffects\DemoEffectTunnel.cs" />
     <Compile Include="DemoEffects\DemoEffectCube.cs" />
