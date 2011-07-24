@@ -131,7 +131,6 @@
     <Compile Include="GeometricPrimitives\GeometricPrimitive.cs" />
     <Compile Include="GeometricPrimitives\VertexPositionNormal.cs" />
     <Compile Include="DemoSettings.cs" />
-    <Compile Include="DemoDummy.cs" />
     <Compile Include="Helpers\PrimitiveBatch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

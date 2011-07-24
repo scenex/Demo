@@ -25,10 +25,11 @@ namespace AdrenalineRush
 
         private void StartupScreen_Load(object sender, EventArgs e)
         {
-            DemoDummy gameMock = new DemoDummy();
-            displayModeCollection = gameMock.GraphicsDevice.Adapter.SupportedDisplayModes;
-            currentDisplayMode = gameMock.GraphicsDevice.Adapter.CurrentDisplayMode;
-            gameMock.Dispose();
+            // Find some more intelligent way to access graphics adapter capabilities
+            //DemoDummy gameMock = new DemoDummy();
+            //displayModeCollection = gameMock.GraphicsDevice.Adapter.SupportedDisplayModes;
+            //currentDisplayMode = gameMock.GraphicsDevice.Adapter.CurrentDisplayMode;
+            //gameMock.Dispose();
 
             foreach (DisplayMode displayMode in displayModeCollection)
             {

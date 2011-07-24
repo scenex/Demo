@@ -2,37 +2,35 @@
 namespace AdrenalineRush
 {
     using System;
-    using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
-    using Microsoft.Xna.Framework.Input;
     using AdrenalineRush.DemoEffects;
+    using AdrenalineRush.Sound;
+    using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Input;
 
     using Nuclex.Input;
     using Nuclex.UserInterface;
 
-    using Sound;
-
     public class Demo : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private readonly ISound sound;
+        private readonly GuiManager guiManager;
+        private readonly InputManager inputManager;
+        private readonly GraphicsDeviceManager graphics;
 
-        int workingResolutionWidth = 1024;
-        int workingResolutionHeight = 768;
+        private const int WorkingResolutionWidth = 1024;
+        private const int WorkingResolutionHeight = 768;
 
-        int frameRate = 0;
-        int frameCounter = 0;
+        private int frameRate;
+        private int frameCounter;
 
-        TimeSpan elapsedTime = TimeSpan.Zero;
-        TimeSpan timeLine = TimeSpan.Zero;
+        private TimeSpan elapsedTime = TimeSpan.Zero;
+        private TimeSpan timeLine = TimeSpan.Zero;
 
-        ISound sound;
+        private DemoEffectIntroduction demoEffectIntroduction;
+        private DemoEffectTunnel demoEffectTunnel;
 
-        DemoEffectIntroduction demoEffectIntroduction;
-        DemoEffectTunnel demoEffectTunnel;
-
-        private GuiManager guiManager;
-        private InputManager inputManager;
+        private KeyboardState lastKeyboardState;
+        private KeyboardState currentKeyboardState;
 
         private bool isDemoPaused;
 
@@ -47,33 +45,19 @@ namespace AdrenalineRush
             this.inputManager = new InputManager(this.Services);
             
             Content.RootDirectory = "Content";
-
-            //Resolution.Init(ref graphics);
-            //Resolution.SetVirtualResolution(workingResolutionWidth, workingResolutionHeight);
         }
 
 
         protected override void Initialize()
         {
-            //graphics.PreferMultiSampling = DemoSettings.GetAntiAlias();
-            //graphics.SynchronizeWithVerticalRetrace = DemoSettings.GetVSync();
-
-            //Resolution.SetResolution(DemoSettings.GetDemoResolution().GetDemoWidth(),
-            //                         DemoSettings.GetDemoResolution().GetDemoHeight(),
-            //                         DemoSettings.GetFullscreen());
-
-            //Resolution.SetResolution(1680, 1050, false);
-
             this.sound.Init();
 
             graphics.PreferMultiSampling = false;
             graphics.SynchronizeWithVerticalRetrace = false;
-            graphics.PreferredBackBufferWidth = workingResolutionWidth;
-            graphics.PreferredBackBufferHeight = workingResolutionHeight;
+            graphics.PreferredBackBufferWidth = WorkingResolutionWidth;
+            graphics.PreferredBackBufferHeight = WorkingResolutionHeight;
             graphics.ApplyChanges();
-          
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-
+         
             this.demoEffectIntroduction = new DemoEffectIntroduction(this);
             demoEffectTunnel = new DemoEffectTunnel(this);
 
@@ -110,16 +94,8 @@ namespace AdrenalineRush
 
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                this.Exit();
-            }
+            HandleInput();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                this.isDemoPaused = this.isDemoPaused != true;
-            }
-                       
             elapsedTime += gameTime.ElapsedGameTime;
 
             if (isDemoPaused == false)
@@ -159,6 +135,22 @@ namespace AdrenalineRush
             this.demoEffectTunnel.RunDemoEffect(timeLine, 5001, 63000);
 
             base.Draw(gameTime);
+        }
+
+        private void HandleInput()
+        {
+            lastKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+
+            if (currentKeyboardState.IsKeyDown(Keys.Space) && !lastKeyboardState.IsKeyDown(Keys.Space))
+            {
+                this.isDemoPaused = this.isDemoPaused != true;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
+                this.Exit();
+            }
         }
     }
 }

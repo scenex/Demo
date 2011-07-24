@@ -39,7 +39,7 @@ namespace AdrenalineRush.DemoEffects
         KeyboardState previousKeyboardState;
 
         private int demoEffectDuration;
-        private float currentAbsolutePosition;
+        private float demoEffectAbsolutePosition;
 
         public DemoEffectTunnel(Game game) : base(game)
         {
@@ -80,7 +80,7 @@ namespace AdrenalineRush.DemoEffects
 
         public override void Update(GameTime gameTime)
         {
-            cameraAxisZ = (currentAbsolutePosition / demoEffectDuration) * 3629;
+            cameraAxisZ = this.GetDemoEffectProgress() * 3629;
 
             cameraSpeedMultiplier += 0.0001f;
 
@@ -195,8 +195,7 @@ namespace AdrenalineRush.DemoEffects
                 this.Enabled = true;
                 this.Visible = true;
 
-                demoEffectDuration = endTime - startTime;
-                currentAbsolutePosition = (float)timeLine.TotalMilliseconds - startTime;
+                DetermineCurrentAbsolutePosition(timeLine, startTime, endTime);
 
                 //Insert screen flashes here
 
@@ -226,6 +225,17 @@ namespace AdrenalineRush.DemoEffects
                 this.Enabled = false;
                 this.Visible = false;
             }
+        }
+
+        private void DetermineCurrentAbsolutePosition(TimeSpan timeLine, int startTime, int endTime)
+        {
+            this.demoEffectDuration = endTime - startTime;
+            this.demoEffectAbsolutePosition = (float)timeLine.TotalMilliseconds - startTime;
+        }
+
+        private float GetDemoEffectProgress()
+        {
+            return this.demoEffectAbsolutePosition / this.demoEffectDuration;
         }
     }
 }
