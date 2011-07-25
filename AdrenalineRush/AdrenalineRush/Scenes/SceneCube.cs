@@ -16,7 +16,7 @@ namespace AdrenalineRush.DemoEffects
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class DemoEffectCube : Microsoft.Xna.Framework.DrawableGameComponent
+    public class SceneCube : Microsoft.Xna.Framework.DrawableGameComponent
     {
         GraphicsDeviceManager graphics;
         Game game;
@@ -51,7 +51,7 @@ namespace AdrenalineRush.DemoEffects
         bool isWireframe = false;
 
         // TODO: REFACTOR LOAD SHADER LOCALLY FROM COMPONENT
-        public DemoEffectCube(Game game, Effect postProcessEffect) : base(game)
+        public SceneCube(Game game, Effect postProcessEffect) : base(game)
         {
             this.game = game;
             this._postProcessEffect = postProcessEffect;            

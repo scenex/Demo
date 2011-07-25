@@ -2,7 +2,7 @@
 namespace AdrenalineRush
 {
     using System;
-    using AdrenalineRush.DemoEffects;
+    using AdrenalineRush.Scenes;
     using AdrenalineRush.Sound;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Input;
@@ -10,7 +10,7 @@ namespace AdrenalineRush
     using Nuclex.Input;
     using Nuclex.UserInterface;
 
-    public class Demo : Microsoft.Xna.Framework.Game
+    public class Demo : Game
     {
         private readonly ISound sound;
         private readonly GuiManager guiManager;
@@ -26,8 +26,8 @@ namespace AdrenalineRush
         private TimeSpan elapsedTime = TimeSpan.Zero;
         private TimeSpan timeLine = TimeSpan.Zero;
 
-        private DemoEffectIntroduction demoEffectIntroduction;
-        private DemoEffectTunnel demoEffectTunnel;
+        private SceneIntroduction sceneIntroduction;
+        private SceneTunnel sceneTunnel;
 
         private KeyboardState lastKeyboardState;
         private KeyboardState currentKeyboardState;
@@ -57,12 +57,12 @@ namespace AdrenalineRush
             graphics.PreferredBackBufferWidth = WorkingResolutionWidth;
             graphics.PreferredBackBufferHeight = WorkingResolutionHeight;
             graphics.ApplyChanges();
-         
-            this.demoEffectIntroduction = new DemoEffectIntroduction(this);
-            demoEffectTunnel = new DemoEffectTunnel(this);
 
-            this.Components.Add(this.demoEffectIntroduction);
-            this.Components.Add(demoEffectTunnel);
+            this.sceneIntroduction = new SceneIntroduction(this) { Enabled = false, Visible = false };
+            this.Components.Add(this.sceneIntroduction);
+
+            this.sceneTunnel = new SceneTunnel(this) { Enabled = false, Visible = false };
+            this.Components.Add(this.sceneTunnel);       
 
             this.Components.Add(this.guiManager);
             this.Components.Add(this.inputManager);
@@ -94,7 +94,8 @@ namespace AdrenalineRush
 
         protected override void Update(GameTime gameTime)
         {
-            HandleInput();
+            this.HandleInput();
+            this.CalculateFps();
 
             elapsedTime += gameTime.ElapsedGameTime;
 
@@ -110,29 +111,33 @@ namespace AdrenalineRush
             {
                 sound.Pause();
             }
-
-            // FPS
-            if (elapsedTime > TimeSpan.FromSeconds(1))
-            {
-                elapsedTime -= TimeSpan.FromSeconds(1);
-                frameRate = frameCounter;
-                frameCounter = 0;
-            }
-
+            
+            this.Window.Title = "Time Line: " + ((int)timeLine.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
             base.Update(new GameTime(timeLine, elapsedTime));
         }
 
         protected override void Draw(GameTime gameTime)
         {
             guiManager.Draw(gameTime);
-
-            frameCounter++;
-            this.Window.Title = "Time Line: " + ((int)timeLine.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
-
             GraphicsDevice.Clear(Color.Black);
 
-            this.demoEffectIntroduction.RunDemoEffect(timeLine, 0, 5000);
-            this.demoEffectTunnel.RunDemoEffect(timeLine, 5001, 63000);
+            var time = timeLine.TotalMilliseconds;
+
+
+            if (time > 0 && time <= 5000)
+            {
+                this.sceneIntroduction.Enabled = true;
+                this.sceneIntroduction.Visible = true;
+            }
+
+            if (time > 5000 && time <= 63000)
+            {
+                this.sceneIntroduction.Enabled = false;
+                this.sceneIntroduction.Visible = false;
+
+                this.sceneTunnel.Enabled = true;
+                this.sceneTunnel.Visible = true;
+            }
 
             base.Draw(gameTime);
         }
@@ -151,6 +156,18 @@ namespace AdrenalineRush
             {
                 this.Exit();
             }
+        }
+
+        private void CalculateFps()
+        {
+            if (elapsedTime > TimeSpan.FromSeconds(1))
+            {
+                elapsedTime -= TimeSpan.FromSeconds(1);
+                frameRate = frameCounter;
+                frameCounter = 0;
+            }
+
+            frameCounter++;
         }
     }
 }

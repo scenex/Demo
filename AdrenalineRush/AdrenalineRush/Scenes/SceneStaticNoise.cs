@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace AdrenalineRush.DemoEffects
 {
-    public class DemoEffectTVNoise
+    public class SceneStaticNoise
     {
         GraphicsDevice graphicsDevice;
         SpriteBatch spriteBatch;
@@ -21,7 +21,7 @@ namespace AdrenalineRush.DemoEffects
 
         int currentFrameIndex = 0;
 
-        public DemoEffectTVNoise(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Texture2D texture, Effect effect, int width, int height)
+        public SceneStaticNoise(GraphicsDevice graphicsDevice, SpriteBatch spriteBatch, Texture2D texture, Effect effect, int width, int height)
         {
             this.graphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;
