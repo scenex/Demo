@@ -1,6 +1,7 @@
 
 namespace AdrenalineRush.Scenes
 {
+    using System;
     using System.Diagnostics;
 
     using Microsoft.Xna.Framework;
@@ -15,6 +16,8 @@ namespace AdrenalineRush.Scenes
         private float fadeMultiplier;
 
         private double runningTime;
+
+        private double stepTotal;
 
         public SceneIntroduction(Game game) : base(game)
         {
@@ -37,11 +40,18 @@ namespace AdrenalineRush.Scenes
         public override void Update(GameTime gameTime)
         {
             this.runningTime = gameTime.TotalGameTime.TotalMilliseconds;
-            Debug.WriteLine(this.runningTime);
 
-            fadeMultiplier = (float)runningTime * 0.0002f;
+            fadeMultiplier = this.VaryingFadeMultiplier(gameTime.ElapsedGameTime.TotalMilliseconds);
             effect.Parameters["fadeMultiplier"].SetValue(fadeMultiplier);
             base.Update(gameTime);
+        }
+
+        private float VaryingFadeMultiplier(double elapsedTime)
+        {
+            double step = elapsedTime / 1000;
+            this.stepTotal += step;
+
+            return (float)Math.Pow(Math.Sin(this.stepTotal), 2) * 0.9f;
         }
 
         public override void Draw(GameTime gameTime)

@@ -95,9 +95,9 @@ namespace AdrenalineRush
         protected override void Update(GameTime gameTime)
         {
             this.HandleInput();
-            this.CalculateFps();
+            this.CalculateFps(gameTime.ElapsedGameTime);
 
-            elapsedTime += gameTime.ElapsedGameTime;
+            // elapsedTime += gameTime.ElapsedGameTime; // To FPS?
 
             if (isDemoPaused == false)
             {
@@ -113,7 +113,8 @@ namespace AdrenalineRush
             }
             
             this.Window.Title = "Time Line: " + ((int)timeLine.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
-            base.Update(new GameTime(timeLine, elapsedTime));
+            base.Update(new GameTime(timeLine, gameTime.ElapsedGameTime));
+            // base.Update(new GameTime(timeLine, elapsedTime));
         }
 
         protected override void Draw(GameTime gameTime)
@@ -124,13 +125,13 @@ namespace AdrenalineRush
             var time = timeLine.TotalMilliseconds;
 
 
-            if (time > 0 && time <= 5000)
+            if (time > 0 && time <= 10000)
             {
                 this.sceneIntroduction.Enabled = true;
                 this.sceneIntroduction.Visible = true;
             }
 
-            if (time > 5000 && time <= 63000)
+            if (time > 10000 && time <= 63000)
             {
                 this.sceneIntroduction.Enabled = false;
                 this.sceneIntroduction.Visible = false;
@@ -158,7 +159,7 @@ namespace AdrenalineRush
             }
         }
 
-        private void CalculateFps()
+        private void CalculateFps(TimeSpan elapsedGameTime)
         {
             if (elapsedTime > TimeSpan.FromSeconds(1))
             {
@@ -168,6 +169,7 @@ namespace AdrenalineRush
             }
 
             frameCounter++;
+            elapsedTime += elapsedGameTime; // To FPS?
         }
     }
 }
