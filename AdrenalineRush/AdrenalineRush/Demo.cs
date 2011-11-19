@@ -2,9 +2,11 @@
 namespace AdrenalineRush
 {
     using System;
+    using AdrenalineRush.DemoEffects;
     using AdrenalineRush.Scenes;
     using AdrenalineRush.Sound;
     using Microsoft.Xna.Framework;
+    using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
 
     using Nuclex.Input;
@@ -17,6 +19,9 @@ namespace AdrenalineRush
         private readonly InputManager inputManager;
         private readonly GraphicsDeviceManager graphics;
 
+        // Used to skip to next effect, music not in sync yet.
+        private readonly TimeSpan timeLineOffset = TimeSpan.FromMilliseconds(10000);
+
         private const int WorkingResolutionWidth = 1024;
         private const int WorkingResolutionHeight = 768;
 
@@ -28,6 +33,9 @@ namespace AdrenalineRush
 
         private SceneIntroduction sceneIntroduction;
         private SceneTunnel sceneTunnel;
+        private SceneCube sceneCube;
+
+        private Effect sceneCubeFx;
 
         private KeyboardState lastKeyboardState;
         private KeyboardState currentKeyboardState;
@@ -58,21 +66,26 @@ namespace AdrenalineRush
             graphics.PreferredBackBufferHeight = WorkingResolutionHeight;
             graphics.ApplyChanges();
 
+            sceneCubeFx = Content.Load<Effect>(@"Shaders\PS_Trigonometry_Blur");
+
             this.sceneIntroduction = new SceneIntroduction(this) { Enabled = false, Visible = false };
             this.Components.Add(this.sceneIntroduction);
 
             this.sceneTunnel = new SceneTunnel(this) { Enabled = false, Visible = false };
-            this.Components.Add(this.sceneTunnel);       
+            this.Components.Add(this.sceneTunnel);
 
-            this.Components.Add(this.guiManager);
-            this.Components.Add(this.inputManager);
+            this.sceneCube = new SceneCube(this, sceneCubeFx) { Enabled = false, Visible = false };
+            this.Components.Add(this.sceneCube);
+
+            //this.Components.Add(this.guiManager);
+            //this.Components.Add(this.inputManager);
             
-            this.IsMouseVisible = true;
-            mainScreen = new Screen(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-            mainScreen.Desktop.Children.Add(new DemoController());
+            //this.IsMouseVisible = true;
+            //mainScreen = new Screen(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
+            //mainScreen.Desktop.Children.Add(new DemoController());
             
-            this.guiManager.Screen = mainScreen;
-            this.guiManager.Visible = false;
+            //this.guiManager.Screen = mainScreen;
+            //this.guiManager.Visible = false;
 
             base.Initialize();
         }
@@ -102,6 +115,7 @@ namespace AdrenalineRush
             if (isDemoPaused == false)
             {
                 timeLine += gameTime.ElapsedGameTime;
+
                 if (sound.PlaybackPaused)
                 {
                     sound.Play();
@@ -112,8 +126,11 @@ namespace AdrenalineRush
                 sound.Pause();
             }
             
-            this.Window.Title = "Time Line: " + ((int)timeLine.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
-            base.Update(new GameTime(timeLine, gameTime.ElapsedGameTime));
+            // Skip in timeline
+            var timeLineTemp = timeLine + timeLineOffset;
+
+            this.Window.Title = "Time Line: " + ((int)timeLineTemp.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
+            base.Update(new GameTime(timeLineTemp, gameTime.ElapsedGameTime));
             // base.Update(new GameTime(timeLine, elapsedTime));
         }
 
@@ -122,22 +139,31 @@ namespace AdrenalineRush
             guiManager.Draw(gameTime);
             GraphicsDevice.Clear(Color.Black);
 
-            var time = timeLine.TotalMilliseconds;
+            var time = timeLine + timeLineOffset;
 
 
-            if (time > 0 && time <= 10000)
+            if (time.TotalMilliseconds > 0 && time.TotalMilliseconds <= 3000)
             {
                 this.sceneIntroduction.Enabled = true;
                 this.sceneIntroduction.Visible = true;
             }
 
-            if (time > 10000 && time <= 63000)
+            if (time.TotalMilliseconds > 3000 && time.TotalMilliseconds <= 10000)
             {
                 this.sceneIntroduction.Enabled = false;
                 this.sceneIntroduction.Visible = false;
 
                 this.sceneTunnel.Enabled = true;
                 this.sceneTunnel.Visible = true;
+            }
+
+            if (time.TotalMilliseconds > 10000 && time.TotalMilliseconds <= 30000)
+            {
+                this.sceneTunnel.Enabled = false;
+                this.sceneTunnel.Visible = false;
+
+                this.sceneCube.Enabled = true;
+                this.sceneCube.Visible = true;
             }
 
             base.Draw(gameTime);
