@@ -2,7 +2,7 @@
 namespace AdrenalineRush
 {
     using System;
-    using AdrenalineRush.DemoEffects;
+
     using AdrenalineRush.Scenes;
     using AdrenalineRush.Sound;
     using Microsoft.Xna.Framework;
@@ -66,15 +66,13 @@ namespace AdrenalineRush
             graphics.PreferredBackBufferHeight = WorkingResolutionHeight;
             graphics.ApplyChanges();
 
-            sceneCubeFx = Content.Load<Effect>(@"Shaders\PS_Trigonometry_Blur");
-
             this.sceneIntroduction = new SceneIntroduction(this) { Enabled = false, Visible = false };
             this.Components.Add(this.sceneIntroduction);
 
             this.sceneTunnel = new SceneTunnel(this) { Enabled = false, Visible = false };
             this.Components.Add(this.sceneTunnel);
 
-            this.sceneCube = new SceneCube(this, sceneCubeFx) { Enabled = false, Visible = false };
+            this.sceneCube = new SceneCube(this) { Enabled = false, Visible = false };
             this.Components.Add(this.sceneCube);
 
             //this.Components.Add(this.guiManager);

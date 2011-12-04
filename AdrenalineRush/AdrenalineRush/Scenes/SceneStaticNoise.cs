@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
-
-namespace AdrenalineRush.DemoEffects
+﻿
+namespace AdrenalineRush.Scenes
 {
+    using System.Collections.Generic;
+
+    using Microsoft.Xna.Framework.Graphics;
+    using Microsoft.Xna.Framework;
+
     public class SceneStaticNoise
     {
         GraphicsDevice graphicsDevice;

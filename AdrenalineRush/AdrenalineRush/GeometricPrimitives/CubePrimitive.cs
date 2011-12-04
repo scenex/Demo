@@ -22,8 +22,7 @@ namespace AdrenalineRush.GeometricPrimitives
         /// <summary>
         /// Constructs a new cube primitive, using default settings.
         /// </summary>
-        public CubePrimitive(GraphicsDevice graphicsDevice)
-            : this(graphicsDevice, 1)
+        public CubePrimitive(GraphicsDevice graphicsDevice) : this(graphicsDevice, 1)
         {
         }
 

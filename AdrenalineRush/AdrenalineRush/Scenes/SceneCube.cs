@@ -1,5 +1,5 @@
 
-namespace AdrenalineRush.DemoEffects
+namespace AdrenalineRush.Scenes
 {
     using System;
     using System.Collections.Generic;
@@ -10,25 +10,10 @@ namespace AdrenalineRush.DemoEffects
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class SceneCube : Microsoft.Xna.Framework.DrawableGameComponent
+    public class SceneCube : DrawableGameComponent
     {
-        GraphicsDeviceManager graphics;
-        Game game;
-        SpriteBatch spriteBatch;
-
-        // Store a list of primitive models, plus which one is currently selected.
-        List<GeometricPrimitive> primitives = new List<GeometricPrimitive>();
-
-        int currentPrimitiveIndex = 0;
-
-        // store a wireframe rasterize state
-        RasterizerState wireFrameState;
-        RenderTarget2D renderTarget;
-        Texture2D texturePrimitive;
-        Effect shader;
-
         // Store a list of tint colors, plus which one is currently selected.
-        List<Color> colors = new List<Color>
+        private readonly List<Color> colors = new List<Color>
         {
             Color.Red,
             Color.Green,
@@ -37,18 +22,42 @@ namespace AdrenalineRush.DemoEffects
             Color.Black,
         };
 
-        int currentColorIndex = 2;
-
-        Effect _postProcessEffect;
-        float size = 0;
-        // Are we rendering in wireframe mode
-        bool isWireframe = false;
-
-        // TODO: REFACTOR LOAD SHADER LOCALLY FROM COMPONENT
-        public SceneCube(Game game, Effect postProcessEffect) : base(game)
+        // store a wireframe rasterize state
+        private readonly RasterizerState wireFrameState = new RasterizerState()
         {
-            this.game = game;
-            this._postProcessEffect = postProcessEffect;            
+            FillMode = FillMode.WireFrame,
+            CullMode = CullMode.None,
+        };
+
+        // Store a list of primitive models, plus which one is currently selected.
+        private readonly List<GeometricPrimitive> primitives = new List<GeometricPrimitive>();
+        private readonly Game game;
+
+        // private const int CurrentPrimitiveIndex = 0;
+        private const int CurrentColorIndex = 2;
+        private const bool Wireframe = false;
+
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private RenderTarget2D renderTarget;
+        private Texture2D texturePrimitive;
+
+        private Effect postProcessShader;
+        private Effect regularShader;
+
+        private float timeline;
+        private Vector3 cameraPosition;
+        private float aspectRatio;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SceneCube"/> class. 
+        /// </summary>
+        /// <param name="game">
+        /// The game instance.
+        /// </param>
+        public SceneCube(Game game) : base(game)
+        {
+            this.game = game;     
         }
 
         /// <summary>
@@ -59,99 +68,82 @@ namespace AdrenalineRush.DemoEffects
         {          
             base.Initialize();
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
+            this.GraphicsDevice.RasterizerState = Wireframe ? this.wireFrameState : RasterizerState.CullCounterClockwise;
+            cameraPosition = new Vector3(0, 0, 5f);
+            this.aspectRatio = GraphicsDevice.Viewport.AspectRatio;
         }
 
         protected override void LoadContent()
-        {
-            primitives.Add(new CubePrimitive(GraphicsDevice));
-            //primitives.Add(new SpherePrimitive(GraphicsDevice));
-            //primitives.Add(new CylinderPrimitive(GraphicsDevice));
-            //primitives.Add(new TorusPrimitive(GraphicsDevice));
-            //primitives.Add(new TeapotPrimitive(GraphicsDevice));
+        {            
+            this.renderTarget = new RenderTarget2D(GraphicsDevice, 1024, 768);
 
-            wireFrameState = new RasterizerState()
-            {
-                FillMode = FillMode.WireFrame,
-                CullMode = CullMode.None,
-            };
-            renderTarget = new RenderTarget2D(GraphicsDevice, 1024, 768);
-            
-            //texturePrimitive = game.Content.Load<Texture2D>("StartupLogo");
-            shader = game.Content.Load<Effect>(@"Shaders\VS_PS_Ambient_Diffuse_Specular");
+            this.regularShader = game.Content.Load<Effect>(@"Shaders\VS_PS_Ambient_Diffuse_Specular");
+            this.postProcessShader = game.Content.Load<Effect>(@"Shaders\PS_Trigonometry_Blur");
+
+            this.primitives.Add(new CubePrimitive(GraphicsDevice));
+            this.primitives.Add(new CubePrimitive(GraphicsDevice));
+            this.primitives.Add(new CubePrimitive(GraphicsDevice));
+
             base.LoadContent();
         }
 
 
-
-        /// <summary>
-        /// Allows the game component to update itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            // TODO: Add your update code here
-
+            this.timeline = (float)gameTime.TotalGameTime.TotalSeconds;
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Called when the DrawableGameComponent needs to be drawn. Override this method with component-specific drawing code. Reference page contains links to related conceptual articles.
+        /// </summary>
+        /// <param name="gameTime">Time passed since the last call to Draw.</param>
         public override void Draw(GameTime gameTime)
         {
-
-            size += 0.1f;
-
-            //GraphicsDevice.SetRenderTarget(renderTarget);
             GraphicsDevice.Clear(Color.Black);
-
-            if (isWireframe)
-            {
-                GraphicsDevice.RasterizerState = wireFrameState;
-            }
-            else
-            {
-                GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
-            }
-
-            // Create camera matrices, making the object spin.
-            float time = (float)gameTime.TotalGameTime.TotalSeconds;
-
-            float yaw = time * 0.4f;
-            float pitch = time * 0.7f;
-            float roll = time * 1.1f;
-
-            Vector3 cameraPosition = new Vector3(0, 0, 2.5f);
-
-            float aspect = GraphicsDevice.Viewport.AspectRatio;
-
-            Matrix world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
-            Matrix view = Matrix.CreateLookAt(cameraPosition, Vector3.Zero, Vector3.Up);
-            Matrix projection = Matrix.CreatePerspectiveFieldOfView(1, aspect, 1, 10);
-
-            // Draw the current primitive.
-            GeometricPrimitive currentPrimitive = primitives[currentPrimitiveIndex];
-            Color color = colors[currentColorIndex];
-
-            //currentPrimitive.Draw(world, view, projection, color, texturePrimitive);
-
-            shader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
-            shader.Parameters["matWorld"].SetValue(world);
-            shader.Parameters["vLightDirection"].SetValue(Vector4.Zero);
-            shader.Parameters["vecEye"].SetValue(new Vector4(cameraPosition.X, cameraPosition.Y, cameraPosition.Z, 0));
             
-            shader.Parameters["vAmbient"].SetValue(new Vector4(0.2f, 0.2f, 0f, 0.2f));
-            shader.Parameters["vDiffuseColor"].SetValue(new Vector4(0.7f, 0.7f, 0.7f, 1.0f));
-            shader.Parameters["vSpecularColor"].SetValue(new Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            var yaw = this.timeline * 0.4f;
+            var pitch = this.timeline * 0.7f;
+            var roll = this.timeline * 1.1f;
+
+            var world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
+
+            var view = Matrix.CreateLookAt(cameraPosition, Vector3.Zero, Vector3.Up);
+            var projection = Matrix.CreatePerspectiveFieldOfView(1, this.aspectRatio, 1, 10);
+
+            this.regularShader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
+            this.regularShader.Parameters["matWorld"].SetValue(world);
+
+            this.regularShader.Parameters["vLightDirection"].SetValue(Vector4.One);
+            this.regularShader.Parameters["vecEye"].SetValue(new Vector4(cameraPosition.X, cameraPosition.Y, cameraPosition.Z, 0));
             
+            this.regularShader.Parameters["vAmbient"].SetValue(new Vector4(0.2f, 0.2f, 0f, 0.2f));
+            this.regularShader.Parameters["vDiffuseColor"].SetValue(new Vector4(0.7f, 0.7f, 0.7f, 1.0f));
+            this.regularShader.Parameters["vSpecularColor"].SetValue(new Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
-            currentPrimitive.Draw(shader);
-            GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
+            var firstCube = primitives[0];
+            firstCube.Draw(this.regularShader);
 
+            world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll) * Matrix.CreateTranslation(1.8f, 0, 0);
+            this.regularShader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
+            this.regularShader.Parameters["matWorld"].SetValue(world);
+
+            var secondCube = primitives[1];
+            secondCube.Draw(this.regularShader);
+
+            world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll) * Matrix.CreateTranslation(-1.8f, 0, 0);
+            this.regularShader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
+            this.regularShader.Parameters["matWorld"].SetValue(world);
+
+            var thirdCube = primitives[1];
+            thirdCube.Draw(this.regularShader);
+
+            //size += 0.1f;
+            //GraphicsDevice.SetRenderTarget(renderTarget);
             //GraphicsDevice.SetRenderTarget(null);
-
-            //spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, _postProcessEffect, Resolution.getTransformationMatrix());
-            
+            //spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, _postProcessEffect, Resolution.getTransformationMatrix());           
             //_postProcessEffect.CurrentTechnique.Passes[0].Apply();
             //_postProcessEffect.Parameters["size"].SetValue(size);
-
             //spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
             //spriteBatch.End();
 
