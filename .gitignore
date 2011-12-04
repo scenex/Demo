@@ -1,0 +1,6 @@
+obj
+bin
+_ReSharper.AdrenalineRush
+
+*.cachefile
+*.user

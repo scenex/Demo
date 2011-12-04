@@ -93,8 +93,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Shaders\PS_Trigonometry_Blur.fx">
-      <Name>PS_Trigonometry_Blur</Name>
+    <Compile Include="Shaders\PS_Trigonometry_Transpose.fx">
+      <Name>PS_Trigonometry_Transpose</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
@@ -173,6 +173,13 @@
   <ItemGroup>
     <Compile Include="Shaders\PS_Test.fx">
       <Name>PS_Test</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Shaders\PS_Trigonometry_Blur.fx">
+      <Name>PS_Trigonometry_Blur</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>

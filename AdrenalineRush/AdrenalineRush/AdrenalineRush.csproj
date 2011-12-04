@@ -93,13 +93,6 @@
     <Reference Include="mscorlib">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Nuclex.Input, Version=4.0.0.0, Culture=neutral, PublicKeyToken=96bb577564343f16, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\nuclex\Nuclex.Input.dll</HintPath>
-    </Reference>
-    <Reference Include="Nuclex.UserInterface">
-      <HintPath>..\Libs\nuclex\Nuclex.UserInterface.dll</HintPath>
-    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -120,7 +113,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoController.cs" />
     <Compile Include="Scenes\SceneIntroduction.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Scenes\SceneEffectTunnel.cs" />

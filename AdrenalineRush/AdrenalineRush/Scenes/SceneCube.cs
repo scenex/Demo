@@ -100,54 +100,60 @@ namespace AdrenalineRush.Scenes
         /// <param name="gameTime">Time passed since the last call to Draw.</param>
         public override void Draw(GameTime gameTime)
         {
+            GraphicsDevice.SetRenderTarget(renderTarget);
             GraphicsDevice.Clear(Color.Black);
             
             var yaw = this.timeline * 0.4f;
             var pitch = this.timeline * 0.7f;
             var roll = this.timeline * 1.1f;
 
-            var world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll);
-
             var view = Matrix.CreateLookAt(cameraPosition, Vector3.Zero, Vector3.Up);
             var projection = Matrix.CreatePerspectiveFieldOfView(1, this.aspectRatio, 1, 10);
 
-            this.regularShader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
-            this.regularShader.Parameters["matWorld"].SetValue(world);
-
             this.regularShader.Parameters["vLightDirection"].SetValue(Vector4.One);
+
             this.regularShader.Parameters["vecEye"].SetValue(new Vector4(cameraPosition.X, cameraPosition.Y, cameraPosition.Z, 0));
             
-            this.regularShader.Parameters["vAmbient"].SetValue(new Vector4(0.2f, 0.2f, 0f, 0.2f));
-            this.regularShader.Parameters["vDiffuseColor"].SetValue(new Vector4(0.7f, 0.7f, 0.7f, 1.0f));
-            this.regularShader.Parameters["vSpecularColor"].SetValue(new Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+            this.regularShader.Parameters["vAmbient"].SetValue(new Vector4(0.3f, 0.2f, 0.7f, 0.9f));
+            this.regularShader.Parameters["vDiffuseColor"].SetValue(new Vector4(0.7f, 0.5f, 0.8f, 2.0f));
+            this.regularShader.Parameters["vSpecularColor"].SetValue(new Vector4(0.2f, 0.3f, 0.4f, 0.5f));
+
+            // First Cube
+            var world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll) * Matrix.CreateTranslation(-1.8f, 0, 0);
+            this.regularShader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
+            this.regularShader.Parameters["matWorld"].SetValue(world);
 
             var firstCube = primitives[0];
             firstCube.Draw(this.regularShader);
 
-            world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll) * Matrix.CreateTranslation(1.8f, 0, 0);
+            // Second Cube
+            world = Matrix.CreateFromYawPitchRoll(yaw + 0.01f, pitch + 0.01f, roll + 0.01f);
             this.regularShader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
             this.regularShader.Parameters["matWorld"].SetValue(world);
-
+            
             var secondCube = primitives[1];
             secondCube.Draw(this.regularShader);
 
-            world = Matrix.CreateFromYawPitchRoll(yaw, pitch, roll) * Matrix.CreateTranslation(-1.8f, 0, 0);
+            // Third Cube
+            world = Matrix.CreateFromYawPitchRoll(yaw + 0.02f, pitch + 0.02f, roll + 0.02f) * Matrix.CreateTranslation(1.8f, 0, 0);
             this.regularShader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
             this.regularShader.Parameters["matWorld"].SetValue(world);
 
-            var thirdCube = primitives[1];
+            var thirdCube = primitives[2];
             thirdCube.Draw(this.regularShader);
 
-            //size += 0.1f;
-            //GraphicsDevice.SetRenderTarget(renderTarget);
-            //GraphicsDevice.SetRenderTarget(null);
-            //spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, _postProcessEffect, Resolution.getTransformationMatrix());           
-            //_postProcessEffect.CurrentTechnique.Passes[0].Apply();
-            //_postProcessEffect.Parameters["size"].SetValue(size);
-            //spriteBatch.Draw(renderTarget, Vector2.Zero, Color.White);
-            //spriteBatch.End();
 
+            this.PostProcessScene();
             base.Draw(gameTime);
+        }
+
+        private void PostProcessScene()
+        {
+            this.GraphicsDevice.SetRenderTarget(null);
+            this.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, this.postProcessShader, Resolution.getTransformationMatrix());
+            this.postProcessShader.CurrentTechnique.Passes[0].Apply();
+            this.spriteBatch.Draw(this.renderTarget, Vector2.Zero, Color.White);
+            this.spriteBatch.End();
         }
 
         public void RunDemoEffect(TimeSpan gameTime, int startTime, int endTime)

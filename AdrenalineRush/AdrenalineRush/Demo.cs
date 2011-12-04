@@ -9,21 +9,17 @@ namespace AdrenalineRush
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
 
-    using Nuclex.Input;
-    using Nuclex.UserInterface;
-
     public class Demo : Game
     {
         private readonly ISound sound;
-        private readonly GuiManager guiManager;
-        private readonly InputManager inputManager;
-        private readonly GraphicsDeviceManager graphics;
+
+        private const int WorkingResolutionWidth = 1024;
+        private const int WorkingResolutionHeight = 768;
 
         // Used to skip to next effect, music not in sync yet.
         private readonly TimeSpan timeLineOffset = TimeSpan.FromMilliseconds(10000);
 
-        private const int WorkingResolutionWidth = 1024;
-        private const int WorkingResolutionHeight = 768;
+        private GraphicsDeviceManager graphics;
 
         private int frameRate;
         private int frameCounter;
@@ -42,15 +38,10 @@ namespace AdrenalineRush
 
         private bool isDemoPaused;
 
-        private Screen mainScreen;
-
         public Demo()
         {
             graphics = new GraphicsDeviceManager(this);
             this.sound = new SoundBASS();
-
-            this.guiManager = new GuiManager(this.Services);
-            this.inputManager = new InputManager(this.Services);
             
             Content.RootDirectory = "Content";
         }
@@ -75,15 +66,7 @@ namespace AdrenalineRush
             this.sceneCube = new SceneCube(this) { Enabled = false, Visible = false };
             this.Components.Add(this.sceneCube);
 
-            //this.Components.Add(this.guiManager);
-            //this.Components.Add(this.inputManager);
-            
-            //this.IsMouseVisible = true;
-            //mainScreen = new Screen(graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
-            //mainScreen.Desktop.Children.Add(new DemoController());
-            
-            //this.guiManager.Screen = mainScreen;
-            //this.guiManager.Visible = false;
+            Resolution.Init(ref graphics);
 
             base.Initialize();
         }
@@ -134,7 +117,6 @@ namespace AdrenalineRush
 
         protected override void Draw(GameTime gameTime)
         {
-            guiManager.Draw(gameTime);
             GraphicsDevice.Clear(Color.Black);
 
             var time = timeLine + timeLineOffset;
