@@ -51,11 +51,20 @@ namespace AdrenalineRush.GeometricPrimitives
 
         /// <summary>
         /// Adds a new vertex to the primitive model. This should only be called
-        /// during the initialization process, before InitializePrimitive.
+        /// during the initialization process, before InitializePrimitive. This overload supports texture coordinates
         /// </summary>
         protected void AddVertex(Vector3 position, Vector3 normal, Vector2 texCoord)
         {
             vertices.Add(new VertexPositionNormal(position, normal, texCoord));
+        }
+
+        /// <summary>
+        /// Adds a new vertex to the primitive model. This should only be called
+        /// during the initialization process, before InitializePrimitive.
+        /// </summary>
+        protected void AddVertex(Vector3 position, Vector3 normal)
+        {
+            vertices.Add(new VertexPositionNormal(position, normal));
         }
 
 

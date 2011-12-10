@@ -35,6 +35,15 @@ namespace AdrenalineRush.GeometricPrimitives
         }
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public VertexPositionNormal(Vector3 position, Vector3 normal) : this() // syntax for second ctor in struct?
+        {
+            Position = position;
+            Normal = normal;
+        }
+
+        /// <summary>
         /// A VertexDeclaration object, which contains information about the vertex
         /// elements contained within this struct.
         /// </summary>

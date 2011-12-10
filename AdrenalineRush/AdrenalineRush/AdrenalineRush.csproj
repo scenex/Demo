@@ -113,6 +113,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeometricPrimitives\SpherePrimitive.cs" />
     <Compile Include="Scenes\SceneIntroduction.cs" />
     <Compile Include="Helpers\ColorHelper.cs" />
     <Compile Include="Scenes\SceneEffectTunnel.cs" />

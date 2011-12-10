@@ -3,6 +3,8 @@ namespace AdrenalineRush.Scenes
 {
     using System;
     using System.Collections.Generic;
+
+    using AdrenalineRush.DemoEffects.GeometricPrimitives;
     using AdrenalineRush.GeometricPrimitives;
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
@@ -83,6 +85,7 @@ namespace AdrenalineRush.Scenes
             this.primitives.Add(new CubePrimitive(GraphicsDevice));
             this.primitives.Add(new CubePrimitive(GraphicsDevice));
             this.primitives.Add(new CubePrimitive(GraphicsDevice));
+            this.primitives.Add(new SpherePrimitive(GraphicsDevice, 0.5f, 10));
 
             base.LoadContent();
         }
@@ -100,7 +103,7 @@ namespace AdrenalineRush.Scenes
         /// <param name="gameTime">Time passed since the last call to Draw.</param>
         public override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.SetRenderTarget(renderTarget);
+            //GraphicsDevice.SetRenderTarget(renderTarget);
             GraphicsDevice.Clear(Color.Black);
             
             var yaw = this.timeline * 0.4f;
@@ -142,8 +145,21 @@ namespace AdrenalineRush.Scenes
             var thirdCube = primitives[2];
             thirdCube.Draw(this.regularShader);
 
+            // Sphere
+            world = Matrix.CreateFromYawPitchRoll(yaw + 0.02f, pitch + 0.02f, roll + 0.02f) * 
+                Matrix.CreateTranslation(
+                3 * (float)Math.Sin(this.timeline),
+                0,
+                3 * (float)Math.Cos(this.timeline));
 
-            this.PostProcessScene();
+            this.regularShader.Parameters["matWorldViewProj"].SetValue(world * view * projection);
+            this.regularShader.Parameters["matWorld"].SetValue(world);
+
+            var sphere = primitives[3];
+            sphere.Draw(this.regularShader);
+
+
+            //this.PostProcessScene();
             base.Draw(gameTime);
         }
 

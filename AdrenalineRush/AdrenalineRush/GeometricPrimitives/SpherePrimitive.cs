@@ -15,6 +15,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AdrenalineRush.DemoEffects.GeometricPrimitives
 {
+    using AdrenalineRush.GeometricPrimitives;
+
     /// <summary>
     /// Geometric primitive class for drawing spheres.
     /// </summary>
