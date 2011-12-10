@@ -71,7 +71,7 @@ namespace AdrenalineRush.Scenes
             base.Initialize();
             this.spriteBatch = new SpriteBatch(GraphicsDevice);
             this.GraphicsDevice.RasterizerState = Wireframe ? this.wireFrameState : RasterizerState.CullCounterClockwise;
-            cameraPosition = new Vector3(0, 0, 5f);
+
             this.aspectRatio = GraphicsDevice.Viewport.AspectRatio;
         }
 
@@ -110,10 +110,19 @@ namespace AdrenalineRush.Scenes
             var pitch = this.timeline * 0.7f;
             var roll = this.timeline * 1.1f;
 
+            this.cameraPosition = new Vector3(0, 0, 5f);
+
             var view = Matrix.CreateLookAt(cameraPosition, Vector3.Zero, Vector3.Up);
             var projection = Matrix.CreatePerspectiveFieldOfView(1, this.aspectRatio, 1, 10);
 
-            this.regularShader.Parameters["vLightDirection"].SetValue(Vector4.One);
+
+            this.regularShader.Parameters["vLightDirection"].SetValue(new Vector4(
+                3 * (float)Math.Sin(this.timeline),
+                0,
+                3 * (float)Math.Cos(this.timeline),
+                0));
+
+
 
             this.regularShader.Parameters["vecEye"].SetValue(new Vector4(cameraPosition.X, cameraPosition.Y, cameraPosition.Z, 0));
             
