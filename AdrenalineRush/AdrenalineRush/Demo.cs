@@ -16,7 +16,7 @@ namespace AdrenalineRush
         private readonly TimeSpan timeLineOffsetInMilliseconds = TimeSpan.FromMilliseconds(StartTimeInSeconds * 1000);
 
         private readonly ISound sound;
-        private GraphicsDeviceManager graphics;
+        private readonly GraphicsDeviceManager graphics;
         private SceneManager sceneManager;
         
         private int frameRate;
@@ -48,8 +48,6 @@ namespace AdrenalineRush
             this.graphics.PreferredBackBufferWidth = WorkingResolutionWidth;
             this.graphics.PreferredBackBufferHeight = WorkingResolutionHeight;
             this.graphics.ApplyChanges();
-
-            Resolution.Init(ref this.graphics);
 
             this.sceneManager = new SceneManager(this, this.timeLineOffsetInMilliseconds);
             this.Components.Add(this.sceneManager);
