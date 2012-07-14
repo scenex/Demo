@@ -16,8 +16,8 @@ namespace AdrenalineRush
         private const int WorkingResolutionWidth = 1024;
         private const int WorkingResolutionHeight = 768;
 
-        // Used to skip to next effect, music not in sync yet.
-        private readonly TimeSpan timeLineOffset = TimeSpan.FromMilliseconds(10000);
+        private const double demoStartTimeInSeconds = 10;
+        private readonly TimeSpan timeLineOffset = TimeSpan.FromMilliseconds(demoStartTimeInSeconds * 1000);
 
         private GraphicsDeviceManager graphics;
 
@@ -57,6 +57,7 @@ namespace AdrenalineRush
             graphics.PreferredBackBufferHeight = WorkingResolutionHeight;
             graphics.ApplyChanges();
 
+            // Initialize all scenes here
             this.sceneIntroduction = new SceneIntroduction(this) { Enabled = false, Visible = false };
             this.Components.Add(this.sceneIntroduction);
 
@@ -74,6 +75,7 @@ namespace AdrenalineRush
         protected override void LoadContent()
         {
             this.sound.Load("music.wav");
+            this.sound.Seek(demoStartTimeInSeconds);
             this.sound.Play();
 
             base.LoadContent();

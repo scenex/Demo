@@ -138,13 +138,25 @@ namespace AdrenalineRush.Sound
             }           
         }
 
-        public void Seek(double position)
+        /// <summary>
+        /// Seeks in the music stream to the desired positionInSeconds.
+        /// </summary>
+        /// <param name="positionInSeconds">
+        /// The positionInSeconds expressed in seconds.
+        /// </param>
+        /// <returns>Returns whether the seek operation was successful.</returns>
+        public bool Seek(double positionInSeconds)
         {
             if (fileHandle != 0)
             {
                 DisableSplashScreen();
-                Bass.BASS_ChannelSetPosition(fileHandle, position);
-            }            
+
+                var positionInBytes = Bass.BASS_ChannelSeconds2Bytes(fileHandle, positionInSeconds);
+                var result = Bass.BASS_ChannelSetPosition(fileHandle, positionInBytes);
+                return result;
+            }
+
+            return false;
         }
 
         public void Dispose()

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-
-namespace AdrenalineRush
+﻿namespace AdrenalineRush
 {
     static class DemoSettings
     {
@@ -28,9 +22,6 @@ namespace AdrenalineRush
             return isFullscreen;
         }
 
-
-
-
         public static void SetVSync(bool value)
         {
             isVSync = value;
@@ -41,9 +32,6 @@ namespace AdrenalineRush
             return isVSync;
         }
 
-
-
-
         public static void SetAntiAlias(bool value)
         {
             isAntiAlias = value;
@@ -53,9 +41,6 @@ namespace AdrenalineRush
         {
             return isAntiAlias;
         }
-
-
-
 
         public static void SetDemoResolution(DemoResolution demoResolution)
         {
@@ -68,9 +53,6 @@ namespace AdrenalineRush
             return new DemoResolution(demoResolutionWidth, demoResolutionHeight);
         }
 
-
-
-
         public static void SetDemoAspectRatio(float aspectRatio)
         {
             demoAspectRatio = aspectRatio;
@@ -82,18 +64,12 @@ namespace AdrenalineRush
         }
     }
 
-
-
-
     enum AvailableDemoAspectRatios
     { 
         AspectRatio4to3,
         AspectRatio16to9,
         AspectRatio16to10
     }
-
-
-
 
     class DemoResolution
     {
@@ -115,7 +91,5 @@ namespace AdrenalineRush
         {
             return demoHeight;
         }
-    }
-
-    
+    }   
 }

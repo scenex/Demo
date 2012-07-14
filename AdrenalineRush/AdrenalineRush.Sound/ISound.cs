@@ -31,7 +31,7 @@ namespace AdrenalineRush.Sound
 
         void Stop();
 
-        void Seek(double position);
+        bool Seek(double positionInSeconds);
 
         void Dispose();
 
