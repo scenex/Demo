@@ -2,25 +2,24 @@
 namespace AdrenalineRush
 {
     using System;
+    using System.Globalization;
 
     using AdrenalineRush.Scenes;
     using AdrenalineRush.Sound;
     using Microsoft.Xna.Framework;
-    using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
 
     public class Demo : Game
     {
-        private readonly ISound sound;
-
         private const int WorkingResolutionWidth = 1024;
         private const int WorkingResolutionHeight = 768;
 
-        private const double demoStartTimeInSeconds = 10;
-        private readonly TimeSpan timeLineOffset = TimeSpan.FromMilliseconds(demoStartTimeInSeconds * 1000);
+        private const double DemoStartTimeInSeconds = 0;
+        private readonly TimeSpan timeLineOffset = TimeSpan.FromMilliseconds(DemoStartTimeInSeconds * 1000);
 
+        private readonly ISound sound;
         private GraphicsDeviceManager graphics;
-
+        
         private int frameRate;
         private int frameCounter;
 
@@ -31,8 +30,6 @@ namespace AdrenalineRush
         private SceneTunnel sceneTunnel;
         private SceneCube sceneCube;
 
-        private Effect sceneCubeFx;
-
         private KeyboardState lastKeyboardState;
         private KeyboardState currentKeyboardState;
 
@@ -40,24 +37,24 @@ namespace AdrenalineRush
 
         public Demo()
         {
-            graphics = new GraphicsDeviceManager(this);
+            this.graphics = new GraphicsDeviceManager(this);
             this.sound = new SoundBASS();
             
             Content.RootDirectory = "Content";
         }
 
-
         protected override void Initialize()
         {
             this.sound.Init();
 
-            graphics.PreferMultiSampling = false;
-            graphics.SynchronizeWithVerticalRetrace = false;
-            graphics.PreferredBackBufferWidth = WorkingResolutionWidth;
-            graphics.PreferredBackBufferHeight = WorkingResolutionHeight;
-            graphics.ApplyChanges();
+            // Set up video adapter
+            this.graphics.PreferMultiSampling = false;
+            this.graphics.SynchronizeWithVerticalRetrace = false;
+            this.graphics.PreferredBackBufferWidth = WorkingResolutionWidth;
+            this.graphics.PreferredBackBufferHeight = WorkingResolutionHeight;
+            this.graphics.ApplyChanges();
 
-            // Initialize all scenes here
+            // Initialize and add scenes to GameComponentCollection
             this.sceneIntroduction = new SceneIntroduction(this) { Enabled = false, Visible = false };
             this.Components.Add(this.sceneIntroduction);
 
@@ -67,7 +64,7 @@ namespace AdrenalineRush
             this.sceneCube = new SceneCube(this) { Enabled = false, Visible = false };
             this.Components.Add(this.sceneCube);
 
-            Resolution.Init(ref graphics);
+            Resolution.Init(ref this.graphics);
 
             base.Initialize();
         }
@@ -75,54 +72,47 @@ namespace AdrenalineRush
         protected override void LoadContent()
         {
             this.sound.Load("music.wav");
-            this.sound.Seek(demoStartTimeInSeconds);
+            this.sound.Seek(DemoStartTimeInSeconds);
             this.sound.Play();
 
             base.LoadContent();
         }
 
-
         protected override void UnloadContent()
-        {
-            
+        {           
         }
-
 
         protected override void Update(GameTime gameTime)
         {
             this.HandleInput();
             this.CalculateFps(gameTime.ElapsedGameTime);
 
-            // elapsedTime += gameTime.ElapsedGameTime; // To FPS?
-
-            if (isDemoPaused == false)
+            if (this.isDemoPaused == false)
             {
-                timeLine += gameTime.ElapsedGameTime;
+                this.timeLine += gameTime.ElapsedGameTime;
 
-                if (sound.PlaybackPaused)
+                if (this.sound.PlaybackPaused)
                 {
-                    sound.Play();
+                    this.sound.Play();
                 }
             }
             else
             {
-                sound.Pause();
+                this.sound.Pause();
             }
             
             // Skip in timeline
-            var timeLineTemp = timeLine + timeLineOffset;
+            var timeLineTemp = this.timeLine + this.timeLineOffset;
 
-            this.Window.Title = "Time Line: " + ((int)timeLineTemp.TotalMilliseconds).ToString() + " || FPS: " + frameRate.ToString();
+            this.Window.Title = "Time Line: " + ((int)timeLineTemp.TotalMilliseconds).ToString(CultureInfo.InvariantCulture) + " || FPS: " + this.frameRate.ToString(CultureInfo.InvariantCulture);
             base.Update(new GameTime(timeLineTemp, gameTime.ElapsedGameTime));
-            // base.Update(new GameTime(timeLine, elapsedTime));
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
-            var time = timeLine + timeLineOffset;
-
+            var time = this.timeLine + this.timeLineOffset;
 
             if (time.TotalMilliseconds > 0 && time.TotalMilliseconds <= 3000)
             {
@@ -153,10 +143,10 @@ namespace AdrenalineRush
 
         private void HandleInput()
         {
-            lastKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
+            this.lastKeyboardState = this.currentKeyboardState;
+            this.currentKeyboardState = Keyboard.GetState();
 
-            if (currentKeyboardState.IsKeyDown(Keys.Space) && !lastKeyboardState.IsKeyDown(Keys.Space))
+            if (this.currentKeyboardState.IsKeyDown(Keys.Space) && !this.lastKeyboardState.IsKeyDown(Keys.Space))
             {
                 this.isDemoPaused = this.isDemoPaused != true;
             }
@@ -169,15 +159,15 @@ namespace AdrenalineRush
 
         private void CalculateFps(TimeSpan elapsedGameTime)
         {
-            if (elapsedTime > TimeSpan.FromSeconds(1))
+            if (this.elapsedTime > TimeSpan.FromSeconds(1))
             {
-                elapsedTime -= TimeSpan.FromSeconds(1);
-                frameRate = frameCounter;
-                frameCounter = 0;
+                this.elapsedTime -= TimeSpan.FromSeconds(1);
+                this.frameRate = this.frameCounter;
+                this.frameCounter = 0;
             }
 
-            frameCounter++;
-            elapsedTime += elapsedGameTime; // To FPS?
+            this.frameCounter++;
+            this.elapsedTime += elapsedGameTime; // To FPS?
         }
     }
 }
