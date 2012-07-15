@@ -7,60 +7,76 @@ namespace AdrenalineRush.Scenes
     using Microsoft.Xna.Framework;
     using Microsoft.Xna.Framework.Graphics;
 
-    public class SceneIntroduction : DrawableGameComponent
+    public class SceneIntroduction : DrawableGameComponent, IScene
     {
         private readonly GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private Texture2D texture;
         private Effect effect;
         private float fadeMultiplier;
-
-        private double runningTime;
-
         private double stepTotal;
 
         public SceneIntroduction(Game game) : base(game)
         {
-            graphics = (GraphicsDeviceManager)game.Services.GetService(typeof(IGraphicsDeviceManager));
+            this.graphics = (GraphicsDeviceManager)game.Services.GetService(typeof(IGraphicsDeviceManager));
         }
 
         public override void Initialize()
         {
             base.Initialize();
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            this.spriteBatch = new SpriteBatch(GraphicsDevice);
+            this.CompleteSceneDuration = 3000;
         }
 
         protected override void LoadContent()
         {
-            texture = Game.Content.Load<Texture2D>(@"Pictures\Resurrection");
-            effect = Game.Content.Load<Effect>(@"Shaders\PS_Fade");
+            this.texture = Game.Content.Load<Texture2D>(@"Pictures\Resurrection");
+            this.effect = Game.Content.Load<Effect>(@"Shaders\PS_Fade");
             base.LoadContent();
         }
 
         public override void Update(GameTime gameTime)
         {
-            this.runningTime = gameTime.TotalGameTime.TotalMilliseconds;
-
-            fadeMultiplier = this.VaryingFadeMultiplier(gameTime.ElapsedGameTime.TotalMilliseconds);
-            effect.Parameters["fadeMultiplier"].SetValue(fadeMultiplier);
+            this.fadeMultiplier = this.VaryingFadeMultiplier(gameTime.ElapsedGameTime.TotalMilliseconds);
+            this.effect.Parameters["fadeMultiplier"].SetValue(this.fadeMultiplier);
+            Debug.WriteLine(gameTime.TotalGameTime);
             base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            this.spriteBatch.Begin(0, BlendState.Opaque, null, null, null, this.effect);
+            this.spriteBatch.Draw(this.texture, new Rectangle(0, 0, this.graphics.PreferredBackBufferWidth, this.graphics.PreferredBackBufferHeight), Color.White);
+            this.spriteBatch.End();
+
+            base.Draw(gameTime);
         }
 
         private float VaryingFadeMultiplier(double elapsedTime)
         {
             double step = elapsedTime / 1000;
             this.stepTotal += step;
-
             return (float)Math.Pow(Math.Sin(this.stepTotal), 2) * 0.9f;
         }
 
-        public override void Draw(GameTime gameTime)
-        {
-            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect);
-            spriteBatch.Draw(texture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);        
-            spriteBatch.End();
+        /// <summary>
+        /// Gets the complete scene duration in milliseconds.
+        /// </summary>
+        public int CompleteSceneDuration { get; private set; }
 
-            base.Draw(gameTime);
-        }
+        /// <summary>
+        /// Gets the order of the scene beginning from the lowest
+        /// </summary>
+        public int SceneOrder { get; private set; }
+
+        /// <summary>
+        /// Gets the duration of the scene transition in the beginning.
+        /// </summary>
+        public int SceneBeginTransitionDuration { get; private set; }
+
+        /// <summary>
+        /// Gets the duration of the scene transition in the end.
+        /// </summary>
+        public int SceneEndTransitionDuration { get; private set; }
     }
 }

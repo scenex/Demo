@@ -5,7 +5,7 @@ namespace AdrenalineRush.Scenes
     using Microsoft.Xna.Framework.Graphics;
     using Microsoft.Xna.Framework.Input;
 
-    public class SceneTunnel : DrawableGameComponent
+    public class SceneTunnel : DrawableGameComponent, IScene
     {    
         private readonly Game game;
         private const int FramesPerFlash = 8;
@@ -65,7 +65,9 @@ namespace AdrenalineRush.Scenes
             {
                 FillMode = FillMode.WireFrame,
                 CullMode = CullMode.None,
-            };           
+            };
+
+            this.CompleteSceneDuration = 7000;
         }
 
 
@@ -196,5 +198,25 @@ namespace AdrenalineRush.Scenes
                 }
             }
         }
+
+        /// <summary>
+        /// Gets the complete scene duration in milliseconds.
+        /// </summary>
+        public int CompleteSceneDuration { get; private set; }
+
+        /// <summary>
+        /// Gets the order of the scene beginning from the lowest
+        /// </summary>
+        public int SceneOrder { get; private set; }
+
+        /// <summary>
+        /// Gets the duration of the scene transition in the beginning.
+        /// </summary>
+        public int SceneBeginTransitionDuration { get; private set; }
+
+        /// <summary>
+        /// Gets the duration of the scene transition in the end.
+        /// </summary>
+        public int SceneEndTransitionDuration { get; private set; }
     }
 }

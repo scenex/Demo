@@ -12,7 +12,7 @@ namespace AdrenalineRush.Scenes
     /// <summary>
     /// This is a game component that implements IUpdateable.
     /// </summary>
-    public class SceneCube : DrawableGameComponent
+    public class SceneCube : DrawableGameComponent, IScene
     {
         // Store a list of tint colors, plus which one is currently selected.
         private readonly List<Color> colors = new List<Color>
@@ -73,6 +73,7 @@ namespace AdrenalineRush.Scenes
             this.GraphicsDevice.RasterizerState = Wireframe ? this.wireFrameState : RasterizerState.CullCounterClockwise;
 
             this.aspectRatio = GraphicsDevice.Viewport.AspectRatio;
+            this.CompleteSceneDuration = 20000;
         }
 
         protected override void LoadContent()
@@ -194,5 +195,25 @@ namespace AdrenalineRush.Scenes
                 this.Visible = false;
             }
         }
+
+        /// <summary>
+        /// Gets the complete scene duration in milliseconds.
+        /// </summary>
+        public int CompleteSceneDuration { get; private set; }
+
+        /// <summary>
+        /// Gets the order of the scene beginning from the lowest
+        /// </summary>
+        public int SceneOrder { get; private set; }
+
+        /// <summary>
+        /// Gets the duration of the scene transition in the beginning.
+        /// </summary>
+        public int SceneBeginTransitionDuration { get; private set; }
+
+        /// <summary>
+        /// Gets the duration of the scene transition in the end.
+        /// </summary>
+        public int SceneEndTransitionDuration { get; private set; }
     }
 }

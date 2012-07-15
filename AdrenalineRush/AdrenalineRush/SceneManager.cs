@@ -42,29 +42,34 @@ namespace AdrenalineRush
 
             if (time > 0 && time <= 3000)
             {
-                this.sceneIntroduction.Enabled = true;
-                this.sceneIntroduction.Visible = true;
+                EnableScene(this.sceneIntroduction);
             }
 
             if (time > 3000 && time <= 10000)
             {
-                this.sceneIntroduction.Enabled = false;
-                this.sceneIntroduction.Visible = false;
-
-                this.sceneTunnel.Enabled = true;
-                this.sceneTunnel.Visible = true;
+                DisableScene(this.sceneIntroduction);
+                EnableScene(this.sceneTunnel);
             }
 
             if (time > 10000 && time <= 30000)
             {
-                this.sceneTunnel.Enabled = false;
-                this.sceneTunnel.Visible = false;
-
-                this.sceneCube.Enabled = true;
-                this.sceneCube.Visible = true;
+                DisableScene(this.sceneTunnel);
+                EnableScene(this.sceneCube);
             }
 
             base.Draw(gameTime);
+        }
+
+        private static void EnableScene(DrawableGameComponent scene)
+        {
+            scene.Enabled = true;
+            scene.Visible = true;
+        }
+
+        private static void DisableScene(DrawableGameComponent scene)
+        {
+            scene.Enabled = false;
+            scene.Visible = false;
         }
     }
 }

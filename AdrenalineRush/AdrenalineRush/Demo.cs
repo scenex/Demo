@@ -12,7 +12,7 @@ namespace AdrenalineRush
         private const int WorkingResolutionWidth = 1024;
         private const int WorkingResolutionHeight = 768;
 
-        private const double StartTimeInSeconds = 10;
+        private const double StartTimeInSeconds = 0;
         private readonly TimeSpan timeLineOffsetInMilliseconds = TimeSpan.FromMilliseconds(StartTimeInSeconds * 1000);
 
         private readonly ISound sound;
