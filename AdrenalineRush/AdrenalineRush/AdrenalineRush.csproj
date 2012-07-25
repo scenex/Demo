@@ -113,6 +113,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithms\MarchingCubes.cs" />
+    <Compile Include="Algorithms\Metaball.cs" />
     <Compile Include="GeometricPrimitives\SpherePrimitive.cs" />
     <Compile Include="IScene.cs" />
     <Compile Include="SceneManager.cs" />
