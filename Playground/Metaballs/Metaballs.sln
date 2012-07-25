@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Metaballs", "Metaballs\Metaballs\Metaballs.csproj", "{F8FA69B1-0C44-456E-BF6C-009120AF9AAC}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "MetaballsContent", "Metaballs\MetaballsContent\MetaballsContent.contentproj", "{145B8C02-CB9D-490A-A5CE-2A394B498F50}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8FA69B1-0C44-456E-BF6C-009120AF9AAC}.Debug|x86.ActiveCfg = Debug|x86
+		{F8FA69B1-0C44-456E-BF6C-009120AF9AAC}.Debug|x86.Build.0 = Debug|x86
+		{F8FA69B1-0C44-456E-BF6C-009120AF9AAC}.Release|x86.ActiveCfg = Release|x86
+		{F8FA69B1-0C44-456E-BF6C-009120AF9AAC}.Release|x86.Build.0 = Release|x86
+		{145B8C02-CB9D-490A-A5CE-2A394B498F50}.Debug|x86.ActiveCfg = Debug|x86
+		{145B8C02-CB9D-490A-A5CE-2A394B498F50}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

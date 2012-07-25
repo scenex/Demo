@@ -1,6 +1,7 @@
 obj
 bin
 _ReSharper.AdrenalineRush
+_ReSharper.Metaballs
 
 *.cachefile
 *.user
