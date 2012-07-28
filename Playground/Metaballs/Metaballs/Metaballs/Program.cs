@@ -2,6 +2,8 @@ using System;
 
 namespace Metaballs
 {
+    using global::Metaballs.Metaballs;
+
 #if WINDOWS || XBOX
     static class Program
     {
@@ -10,7 +12,7 @@ namespace Metaballs
         /// </summary>
         static void Main(string[] args)
         {
-            using (Game1 game = new Game1())
+            using (Metaballs3D game = new Metaballs3D())
             {
                 game.Run();
             }

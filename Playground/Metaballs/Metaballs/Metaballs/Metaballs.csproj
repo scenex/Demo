@@ -110,9 +110,10 @@
     <Compile Include="GridCell.cs" />
     <Compile Include="MarchingCubeAlgorithm.cs" />
     <Compile Include="Metaball.cs" />
+    <Compile Include="Metaballs3D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="Metaballs2D.cs" />
     <Compile Include="Triangle.cs" />
   </ItemGroup>
   <ItemGroup>

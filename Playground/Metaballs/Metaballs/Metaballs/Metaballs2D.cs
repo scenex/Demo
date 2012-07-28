@@ -16,7 +16,7 @@ namespace Metaballs
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : Microsoft.Xna.Framework.Game
+    public class Metaballs2D : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -32,7 +32,7 @@ namespace Metaballs
 
         private Texture2D texture;
 
-        public Game1()
+        public Metaballs2D()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";           
