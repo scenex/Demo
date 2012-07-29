@@ -12,6 +12,8 @@ namespace Metaballs
 
         public uint CenterY { get; set; }
 
+        public uint CenterZ { get; set; }
+
         public uint Radius { get; set; }
     }
 }

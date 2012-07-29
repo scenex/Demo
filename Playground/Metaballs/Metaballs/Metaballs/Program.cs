@@ -2,7 +2,6 @@ using System;
 
 namespace Metaballs
 {
-    using global::Metaballs.Metaballs;
 
 #if WINDOWS || XBOX
     static class Program
