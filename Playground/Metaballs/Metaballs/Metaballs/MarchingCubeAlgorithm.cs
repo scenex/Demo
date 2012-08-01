@@ -325,31 +325,31 @@ namespace Metaballs
             //      tells us which vertices are inside of the surface
             //   */
             int cubeindex = 0;
-            if (grid.val[0] < isolevel) cubeindex |= 1;
-            if (grid.val[1] < isolevel) cubeindex |= 2;
-            if (grid.val[2] < isolevel) cubeindex |= 4;
-            if (grid.val[3] < isolevel) cubeindex |= 8;
-            if (grid.val[4] < isolevel) cubeindex |= 16;
-            if (grid.val[5] < isolevel) cubeindex |= 32;
-            if (grid.val[6] < isolevel) cubeindex |= 64;
-            if (grid.val[7] < isolevel) cubeindex |= 128;
+            if (grid.value[0] < isolevel) cubeindex |= 1;
+            if (grid.value[1] < isolevel) cubeindex |= 2;
+            if (grid.value[2] < isolevel) cubeindex |= 4;
+            if (grid.value[3] < isolevel) cubeindex |= 8;
+            if (grid.value[4] < isolevel) cubeindex |= 16;
+            if (grid.value[5] < isolevel) cubeindex |= 32;
+            if (grid.value[6] < isolevel) cubeindex |= 64;
+            if (grid.value[7] < isolevel) cubeindex |= 128;
 
             //   /* Cube is entirely in/out of the surface */
             if (edgeTable[cubeindex] == 0) return (0);
 
             /* Find the vertices where the surface intersects the cube */
-            if ((edgeTable[cubeindex] & 1) == 1)       vertlist[0]  = VertexInterp(isolevel, grid.p[0], grid.p[1], grid.val[0], grid.val[1]);
-            if ((edgeTable[cubeindex] & 2) == 2)       vertlist[1]  = VertexInterp(isolevel, grid.p[1], grid.p[2], grid.val[1], grid.val[2]);
-            if ((edgeTable[cubeindex] & 4) == 4)       vertlist[2]  = VertexInterp(isolevel, grid.p[2], grid.p[3], grid.val[2], grid.val[3]);
-            if ((edgeTable[cubeindex] & 8) == 8)       vertlist[3]  = VertexInterp(isolevel, grid.p[3], grid.p[0], grid.val[3], grid.val[0]);
-            if ((edgeTable[cubeindex] & 16) == 16)     vertlist[4]  = VertexInterp(isolevel, grid.p[4], grid.p[5], grid.val[4], grid.val[5]);
-            if ((edgeTable[cubeindex] & 32) == 32)     vertlist[5]  = VertexInterp(isolevel, grid.p[5], grid.p[6], grid.val[5], grid.val[6]);
-            if ((edgeTable[cubeindex] & 64) == 64)     vertlist[6]  = VertexInterp(isolevel, grid.p[6], grid.p[7], grid.val[6], grid.val[7]);
-            if ((edgeTable[cubeindex] & 128) == 128)   vertlist[7]  = VertexInterp(isolevel, grid.p[7], grid.p[4], grid.val[7], grid.val[4]);
-            if ((edgeTable[cubeindex] & 256) == 256)   vertlist[8]  = VertexInterp(isolevel, grid.p[0], grid.p[4], grid.val[0], grid.val[4]);
-            if ((edgeTable[cubeindex] & 512) == 512)   vertlist[9]  = VertexInterp(isolevel, grid.p[1], grid.p[5], grid.val[1], grid.val[5]);
-            if ((edgeTable[cubeindex] & 1024) == 1024) vertlist[10] = VertexInterp(isolevel, grid.p[2], grid.p[6], grid.val[2], grid.val[6]);
-            if ((edgeTable[cubeindex] & 2048) == 2048) vertlist[11] = VertexInterp(isolevel, grid.p[3], grid.p[7], grid.val[3], grid.val[7]);
+            if ((edgeTable[cubeindex] & 1) == 1)       vertlist[0]  = VertexInterp(isolevel, grid.point[0], grid.point[1], grid.value[0], grid.value[1]);
+            if ((edgeTable[cubeindex] & 2) == 2)       vertlist[1]  = VertexInterp(isolevel, grid.point[1], grid.point[2], grid.value[1], grid.value[2]);
+            if ((edgeTable[cubeindex] & 4) == 4)       vertlist[2]  = VertexInterp(isolevel, grid.point[2], grid.point[3], grid.value[2], grid.value[3]);
+            if ((edgeTable[cubeindex] & 8) == 8)       vertlist[3]  = VertexInterp(isolevel, grid.point[3], grid.point[0], grid.value[3], grid.value[0]);
+            if ((edgeTable[cubeindex] & 16) == 16)     vertlist[4]  = VertexInterp(isolevel, grid.point[4], grid.point[5], grid.value[4], grid.value[5]);
+            if ((edgeTable[cubeindex] & 32) == 32)     vertlist[5]  = VertexInterp(isolevel, grid.point[5], grid.point[6], grid.value[5], grid.value[6]);
+            if ((edgeTable[cubeindex] & 64) == 64)     vertlist[6]  = VertexInterp(isolevel, grid.point[6], grid.point[7], grid.value[6], grid.value[7]);
+            if ((edgeTable[cubeindex] & 128) == 128)   vertlist[7]  = VertexInterp(isolevel, grid.point[7], grid.point[4], grid.value[7], grid.value[4]);
+            if ((edgeTable[cubeindex] & 256) == 256)   vertlist[8]  = VertexInterp(isolevel, grid.point[0], grid.point[4], grid.value[0], grid.value[4]);
+            if ((edgeTable[cubeindex] & 512) == 512)   vertlist[9]  = VertexInterp(isolevel, grid.point[1], grid.point[5], grid.value[1], grid.value[5]);
+            if ((edgeTable[cubeindex] & 1024) == 1024) vertlist[10] = VertexInterp(isolevel, grid.point[2], grid.point[6], grid.value[2], grid.value[6]);
+            if ((edgeTable[cubeindex] & 2048) == 2048) vertlist[11] = VertexInterp(isolevel, grid.point[3], grid.point[7], grid.value[3], grid.value[7]);
 
             //   /* Create the triangle */
             int ntriang = 0;

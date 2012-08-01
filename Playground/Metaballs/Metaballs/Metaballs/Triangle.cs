@@ -15,7 +15,7 @@ namespace Metaballs
 
     //typedef struct
     //{
-    //    XYZ p[3];
+    //    XYZ point[3];
     //} TRIANGLE;
 
     public class Triangle

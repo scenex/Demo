@@ -18,19 +18,19 @@ namespace Metaballs
     /// </summary>
     public class GridCell
     {
-        public Vector3[] p;
+        public Vector3[] point;
 
-        public double[] val;
+        public double[] value;
 
         public GridCell()
         {
-            p = new Vector3[8];
-            val = new double[8];
+            this.point = new Vector3[8];
+            this.value = new double[8];
         }
 
 
     }
 }
 
-   //XYZ p[8];
-   //double val[8];
+   //XYZ point[8];
+   //double value[8];
