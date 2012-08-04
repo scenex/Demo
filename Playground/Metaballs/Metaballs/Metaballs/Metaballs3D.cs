@@ -20,8 +20,11 @@ namespace Metaballs
     {
         private bool runOnce;
 
-        private double threshold_max = 1.02f;
-        private double threshold_min = 0.98f;
+        //private double threshold_max = 1.02f;
+        //private double threshold_min = 0.98f;
+
+        private double threshold_min = 1.02f;
+        private double threshold_max = 3.0f;
 
         private Metaball[] metaballs;
 
@@ -38,8 +41,8 @@ namespace Metaballs
 
         BasicEffect basicEffect;
         Matrix world = Matrix.CreateTranslation(0, 0, 0);
-        Matrix view = Matrix.CreateLookAt(new Vector3(0, 0, 40), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-        Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.01f, 200f);
+        Matrix view = Matrix.CreateLookAt(new Vector3(80, 60, 300), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+        Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.01f, 500f);
 
         public Metaballs3D()
         {
@@ -71,7 +74,7 @@ namespace Metaballs
             this.pointCloud = new uint[100*100*100];
 
             metaballs = new Metaball[1];
-            metaballs[0] = new Metaball { CenterX = 50, CenterY = 50, CenterZ = 50, Radius = 70 };
+            metaballs[0] = new Metaball { CenterX = 0, CenterY = 0, CenterZ = 50, Radius = 40 };
             //metaballs[1] = new Metaball { CenterX = 300, CenterY = 150, CenterZ = 100, Radius = 30 };
             //metaballs[2] = new Metaball { CenterX = 350, CenterY = 375, CenterZ = 100, Radius = 20 };
 
@@ -120,7 +123,7 @@ namespace Metaballs
 
                             if (sum >= threshold_min && sum <= threshold_max)
                             {
-                                this.pointCloud[index] = 1;
+                                this.pointCloud[index] = 3;
                             }
                         }
                     }
@@ -172,25 +175,35 @@ namespace Metaballs
 
                             gridCells[index] = new GridCell();
 
-                            gridCells[index].point[0] = new Vector3(0, 0, 0);
-                            gridCells[index].point[1] = new Vector3(10, 0, 0);
-                            gridCells[index].point[2] = new Vector3(10, 0, 10);
-                            gridCells[index].point[3] = new Vector3(0, 0, 10);
-                            gridCells[index].point[4] = new Vector3(0, 10, 0);
-                            gridCells[index].point[5] = new Vector3(10, 10, 0);
-                            gridCells[index].point[6] = new Vector3(10, 10, 10);
-                            gridCells[index].point[7] = new Vector3(0, 10, 10);
+                            //gridCells[index].point[0] = new Vector3(0, 0, 0);
+                            //gridCells[index].point[1] = new Vector3(10, 0, 0);
+                            //gridCells[index].point[2] = new Vector3(10, 0, 10);
+                            //gridCells[index].point[3] = new Vector3(0, 0, 10);
+                            //gridCells[index].point[4] = new Vector3(0, 10, 0);
+                            //gridCells[index].point[5] = new Vector3(10, 10, 0);
+                            //gridCells[index].point[6] = new Vector3(10, 10, 10);
+                            //gridCells[index].point[7] = new Vector3(0, 10, 10);
+
+                            // Todo: Fix from relative to absolute
+                            gridCells[index].point[0] = new Vector3(x*10    , y*10    , z*10);
+                            gridCells[index].point[1] = new Vector3(x*10 + p, y*10    , z*10);
+                            gridCells[index].point[2] = new Vector3(x*10 + p, y*10    , z*10 + p);
+                            gridCells[index].point[3] = new Vector3(x*10    , y*10    , z*10 + p);
+                            gridCells[index].point[4] = new Vector3(x*10    , y*10 + p, z*10);
+                            gridCells[index].point[5] = new Vector3(x*10 + p, y*10 + p, z*10);
+                            gridCells[index].point[6] = new Vector3(x*10 + p, y*10 + p, z*10 + p);
+                            gridCells[index].point[7] = new Vector3(x*10    , y*10 + p, z*10 + p);
 
                             gridCells[index].value[0] = pointCloud[x + y*100 + z*100*100];
                             gridCells[index].value[1] = pointCloud[x+p + y*100 + z*100*100];
-                            gridCells[index].value[2] = pointCloud[x+p + y*100 + z*100*100*p];
-                            gridCells[index].value[3] = pointCloud[x + y*100 + z*100*100*p];
-                            gridCells[index].value[4] = pointCloud[x + y*100*p + z*100*100];
-                            gridCells[index].value[5] = pointCloud[x+p + y*100*p + z*100*100];
-                            gridCells[index].value[6] = pointCloud[x+p + y*100*p + z*100*100*p];
-                            gridCells[index].value[7] = pointCloud[x + y*100*p + z*100*100*p];
+                            gridCells[index].value[2] = pointCloud[x+p + y*100 + z*100*100 + z*100*100*p];
+                            gridCells[index].value[3] = pointCloud[x + y*100 + z*100*100 + z*100*100*p];
+                            gridCells[index].value[4] = pointCloud[x + y*100 + y*100*p + z*100*100];
+                            gridCells[index].value[5] = pointCloud[x+p + y*100 + y*100*p + z*100*100];
+                            gridCells[index].value[6] = pointCloud[x+p + y*100 + y*100*p + z*100*100 + z*100*100*p];
+                            gridCells[index].value[7] = pointCloud[x + y*100 + y*100*p + z*100*100 + z*100*100*p];
 
-                            var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 0.2, out triangles);
+                            var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 2, out triangles);
 
                             if (numberOfTriangles > 0)
                             {
