@@ -22,9 +22,10 @@ namespace Metaballs
 
         //private double threshold_max = 1.02f;
         //private double threshold_min = 0.98f;
-
-        private double threshold_min = 1.02f;
-        private double threshold_max = 3.0f;
+        
+        private double threshold_min = 0.9f;
+        private double threshold_max = 1.2f;
+     
 
         private Metaball[] metaballs;
 
@@ -41,7 +42,7 @@ namespace Metaballs
 
         BasicEffect basicEffect;
         Matrix world = Matrix.CreateTranslation(0, 0, 0);
-        Matrix view = Matrix.CreateLookAt(new Vector3(80, 60, 300), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+        Matrix view = Matrix.CreateLookAt(new Vector3(0,0,100), new Vector3(40,40,0), new Vector3(0, 1, 0));
         Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.01f, 500f);
 
         public Metaballs3D()
@@ -74,8 +75,8 @@ namespace Metaballs
             this.pointCloud = new uint[100*100*100];
 
             metaballs = new Metaball[1];
-            metaballs[0] = new Metaball { CenterX = 0, CenterY = 0, CenterZ = 50, Radius = 40 };
-            //metaballs[1] = new Metaball { CenterX = 300, CenterY = 150, CenterZ = 100, Radius = 30 };
+            metaballs[0] = new Metaball { CenterX = 40, CenterY = 40, CenterZ = 0, Radius = 35 };
+            //metaballs[1] = new Metaball { CenterX = 80, CenterY = 80, CenterZ = 0, Radius = 35 };
             //metaballs[2] = new Metaball { CenterX = 350, CenterY = 375, CenterZ = 100, Radius = 20 };
 
             marchingCubeAlgorithm = new MarchingCubeAlgorithm();
@@ -104,7 +105,7 @@ namespace Metaballs
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // metaballs[0].CenterZ += 1;
+            //metaballs[0].CenterZ += 1;
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -192,20 +193,20 @@ namespace Metaballs
                             gridCells[index].point[4] = new Vector3(x*10    , y*10 + p, z*10);
                             gridCells[index].point[5] = new Vector3(x*10 + p, y*10 + p, z*10);
                             gridCells[index].point[6] = new Vector3(x*10 + p, y*10 + p, z*10 + p);
-                            gridCells[index].point[7] = new Vector3(x*10    , y*10 + p, z*10 + p);                   // TODO: CHECK CORRECTNESS
-                                                                                                                     // First 10x10 Cube (Relative):     First 10x10 Cube (Absolute):        Second 10x10 Cube (Absolute):        100x100 Point Cloud Cube:
-                                                                                                                     // ===================================================================================================================================
-                            gridCells[index].value[0] = pointCloud[x + y*100 + z*100*100];                           // 0    (0)                         0       (0)                         10      (10)                         0       (0)                      
-                            gridCells[index].value[1] = pointCloud[x+p + y*100 + z*100*100];                         // 9    (0+9)                       9       (0+9)                       19      (10+9)                       99      (0+99)
-                            gridCells[index].value[2] = pointCloud[x+p + y*100 + z*100*100 + z*100*100*p];           // 99   (9*10+9)                    100009  (100*100*10 + 9)            100019  (100*100*10 + 19)            9999    (99*100+99)
-                            gridCells[index].value[3] = pointCloud[x + y*100 + z*100*100 + z*100*100*p];             // 90   (9*10)                      100000  (100*100*10)                100000  (100*100*10 + 10)            9900    (99*100)
+                            gridCells[index].point[7] = new Vector3(x*10    , y*10 + p, z*10 + p);                           // TODO: CHECK CORRECTNESS
+                                                                                                                             // First 10x10 Cube (Relative):     First 10x10 Cube (Absolute):        Second 10x10 Cube (Absolute):        100x100 Point Cloud Cube:
+                                                                                                                             // ===================================================================================================================================
+                            gridCells[index].value[0] = pointCloud[x*10 + y*100*10 + z*100*100*10];                          // 0    (0)                         0       (0)                         10      (10)                         0       (0)                      
+                            gridCells[index].value[1] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9];                      // 9    (0+9)                       9       (0+9)                       19      (10+9)                       99      (0+99)
+                            gridCells[index].value[2] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100 + 9];          // 99   (9*10+9)                    100009  (100*100*10 + 9)            100019  (100*100*10 + 19)            9999    (99*100+99)
+                            gridCells[index].value[3] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100];              // 90   (9*10)                      100000  (100*100*10)                100000  (100*100*10 + 10)            9900    (99*100)
 
-                            gridCells[index].value[4] = pointCloud[x + y*100 + y*100*p + z*100*100];                 // 900  (9*10*10)                   1000    (100*10)                    1010    (100*10 + 10)                990000  (99*100*100)
-                            gridCells[index].value[5] = pointCloud[x+p + y*100 + y*100*p + z*100*100];               // 909  (9*10*10+9)                 1009    (100*10 + 9)                1019    (100*10 + 10 + 9)            990099  (99*100*100+99)
-                            gridCells[index].value[6] = pointCloud[x+p + y*100 + y*100*p + z*100*100 + z*100*100*p]; // 999  (9*10*10+9*10+9)            100909  (100*100*10 + 9*100 + 9)    100919  (100*100*10 + 9*100 + 19)    999999  (99*100*100+99*100+99)
-                            gridCells[index].value[7] = pointCloud[x + y*100 + y*100*p + z*100*100 + z*100*100*p];   // 990  (9*10*10+9*10)              100900  (100*100*10 + 9*100)        100910  (100*100*10 + 9*100 + 10)    999900  (99*100*100+99*100)
+                            gridCells[index].value[4] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100];                  // 900  (9*10*10)                   1000    (100*10)                    1010    (100*10 + 10)                990000  (99*100*100)
+                            gridCells[index].value[5] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100 + 9];              // 909  (9*10*10+9)                 1009    (100*10 + 9)                1019    (100*10 + 10 + 9)            990099  (99*100*100+99)
+                            gridCells[index].value[6] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100 + 9*100 + 9];  // 999  (9*10*10+9*10+9)            100909  (100*100*10 + 9*100 + 9)    100919  (100*100*10 + 9*100 + 19)    999999  (99*100*100+99*100+99)
+                            gridCells[index].value[7] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100 + 9*100];      // 990  (9*10*10+9*10)              100900  (100*100*10 + 9*100)        100910  (100*100*10 + 9*100 + 10)    999900  (99*100*100+99*100)
 
-                            var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 2, out triangles);
+                            var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 0.1, out triangles);
 
                             if (numberOfTriangles > 0)
                             {
