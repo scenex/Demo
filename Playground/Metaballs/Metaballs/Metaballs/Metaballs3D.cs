@@ -193,17 +193,17 @@ namespace Metaballs
                             gridCells[index].point[5] = new Vector3(x*10 + p, y*10 + p, z*10);
                             gridCells[index].point[6] = new Vector3(x*10 + p, y*10 + p, z*10 + p);
                             gridCells[index].point[7] = new Vector3(x*10    , y*10 + p, z*10 + p);                   // TODO: CHECK CORRECTNESS
-                                                                                                                     // First 10x10 Cube:        100x100 Point Cloud Cube:
-                                                                                                                     // ==================================================
-                            gridCells[index].value[0] = pointCloud[x + y*100 + z*100*100];                           // 0    (0)                 0       (0)
-                            gridCells[index].value[1] = pointCloud[x+p + y*100 + z*100*100];                         // 9    (0+9)               99      (0+99)
-                            gridCells[index].value[2] = pointCloud[x+p + y*100 + z*100*100 + z*100*100*p];           // 99   (9*10+9)            9999    (99*100+99)
-                            gridCells[index].value[3] = pointCloud[x + y*100 + z*100*100 + z*100*100*p];             // 90   (9*10)              9900    (99*100)
+                                                                                                                     // First 10x10 Cube (Relative):     First 10x10 Cube (Absolute):        Second 10x10 Cube (Absolute):        100x100 Point Cloud Cube:
+                                                                                                                     // ===================================================================================================================================
+                            gridCells[index].value[0] = pointCloud[x + y*100 + z*100*100];                           // 0    (0)                         0       (0)                         10      (10)                         0       (0)                      
+                            gridCells[index].value[1] = pointCloud[x+p + y*100 + z*100*100];                         // 9    (0+9)                       9       (0+9)                       19      (10+9)                       99      (0+99)
+                            gridCells[index].value[2] = pointCloud[x+p + y*100 + z*100*100 + z*100*100*p];           // 99   (9*10+9)                    100009  (100*100*10 + 9)            100019  (100*100*10 + 19)            9999    (99*100+99)
+                            gridCells[index].value[3] = pointCloud[x + y*100 + z*100*100 + z*100*100*p];             // 90   (9*10)                      100000  (100*100*10)                100000  (100*100*10 + 10)            9900    (99*100)
 
-                            gridCells[index].value[4] = pointCloud[x + y*100 + y*100*p + z*100*100];                 // 900  (9*10*10)           990000  (99*100*100)
-                            gridCells[index].value[5] = pointCloud[x+p + y*100 + y*100*p + z*100*100];               // 909  (9*10*10+9)         990099  (99*100*100+99)
-                            gridCells[index].value[6] = pointCloud[x+p + y*100 + y*100*p + z*100*100 + z*100*100*p]; // 999  (9*10*10+9*10+9)    999999  (99*100*100+99*100+99)
-                            gridCells[index].value[7] = pointCloud[x + y*100 + y*100*p + z*100*100 + z*100*100*p];   // 990  (9*10*10+9*10)      999900  (99*100*100+99*100)
+                            gridCells[index].value[4] = pointCloud[x + y*100 + y*100*p + z*100*100];                 // 900  (9*10*10)                   1000    (100*10)                    1010    (100*10 + 10)                990000  (99*100*100)
+                            gridCells[index].value[5] = pointCloud[x+p + y*100 + y*100*p + z*100*100];               // 909  (9*10*10+9)                 1009    (100*10 + 9)                1019    (100*10 + 10 + 9)            990099  (99*100*100+99)
+                            gridCells[index].value[6] = pointCloud[x+p + y*100 + y*100*p + z*100*100 + z*100*100*p]; // 999  (9*10*10+9*10+9)            100909  (100*100*10 + 9*100 + 9)    100919  (100*100*10 + 9*100 + 19)    999999  (99*100*100+99*100+99)
+                            gridCells[index].value[7] = pointCloud[x + y*100 + y*100*p + z*100*100 + z*100*100*p];   // 990  (9*10*10+9*10)              100900  (100*100*10 + 9*100)        100910  (100*100*10 + 9*100 + 10)    999900  (99*100*100+99*100)
 
                             var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 2, out triangles);
 
