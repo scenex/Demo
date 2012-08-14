@@ -23,8 +23,8 @@ namespace Metaballs
         //private double threshold_max = 1.02f;
         //private double threshold_min = 0.98f;
         
-        private double threshold_min = 0.9f;
-        private double threshold_max = 1.2f;
+        private double threshold_min = 0.7f;
+        private double threshold_max = 10.2f;
      
 
         private Metaball[] metaballs;
@@ -33,7 +33,7 @@ namespace Metaballs
 
         private GridCell[] gridCells = new GridCell[10*10*10];
 
-        private uint[] pointCloud;
+        private double[] pointCloud;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -72,10 +72,10 @@ namespace Metaballs
             spriteBatch = new SpriteBatch(GraphicsDevice);
             basicEffect = new BasicEffect(GraphicsDevice);
 
-            this.pointCloud = new uint[100*100*100];
+            this.pointCloud = new double[100*100*100];
 
             metaballs = new Metaball[1];
-            metaballs[0] = new Metaball { CenterX = 40, CenterY = 40, CenterZ = 0, Radius = 35 };
+            metaballs[0] = new Metaball { CenterX = 40, CenterY = 40, CenterZ = 0, Radius = 37 };
             //metaballs[1] = new Metaball { CenterX = 80, CenterY = 80, CenterZ = 0, Radius = 35 };
             //metaballs[2] = new Metaball { CenterX = 350, CenterY = 375, CenterZ = 100, Radius = 20 };
 
@@ -124,7 +124,7 @@ namespace Metaballs
 
                             if (sum >= threshold_min && sum <= threshold_max)
                             {
-                                this.pointCloud[index] = 3;
+                                this.pointCloud[index] += sum;
                             }
                         }
                     }
@@ -206,7 +206,7 @@ namespace Metaballs
                             gridCells[index].value[6] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100 + 9*100 + 9];  // 999  (9*10*10+9*10+9)            100909  (100*100*10 + 9*100 + 9)    100919  (100*100*10 + 9*100 + 19)    999999  (99*100*100+99*100+99)
                             gridCells[index].value[7] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100 + 9*100];      // 990  (9*10*10+9*10)              100900  (100*100*10 + 9*100)        100910  (100*100*10 + 9*100 + 10)    999900  (99*100*100+99*100)
 
-                            var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 0.1, out triangles);
+                            var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 1.0, out triangles);
 
                             if (numberOfTriangles > 0)
                             {
