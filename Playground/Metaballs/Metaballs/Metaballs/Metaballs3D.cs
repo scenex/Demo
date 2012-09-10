@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
+
 
 namespace Metaballs
 {
-    using System.Threading;
-
     using VertexLightingSample;
 
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Metaballs3D : Microsoft.Xna.Framework.Game
+    public class Metaballs3D : Game
     {
         private bool runOnce;
 
@@ -40,13 +34,12 @@ namespace Metaballs
         private double[] pointCloud;
 
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
 
         VertexBuffer vertexBuffer;
 
         BasicEffect basicEffect;
         Matrix world = Matrix.CreateTranslation(0, 0, 0);
-        Matrix view = Matrix.CreateLookAt(new Vector3(0,100,100), new Vector3(40,40,0), new Vector3(0, 1, 0));
+        Matrix view = Matrix.CreateLookAt(new Vector3(0,200,150), new Vector3(0,0,0), new Vector3(0, 1, 0));
         Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.01f, 500f);
 
         public Metaballs3D()
@@ -77,22 +70,14 @@ namespace Metaballs
             grid.LoadGraphicsContent(graphics.GraphicsDevice);
 
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
             basicEffect = new BasicEffect(GraphicsDevice);
 
-            this.pointCloud = new double[100*100*100];
-
             metaballs = new Metaball[2];
-            metaballs[0] = new Metaball { CenterX = 0, CenterY = 40, CenterZ = 0, Radius = 30 };
-            metaballs[1] = new Metaball { CenterX = 100, CenterY = 40, CenterZ = 0, Radius = 30 };
+            metaballs[0] = new Metaball { CenterX = 0, CenterY = 50, CenterZ = 50, Radius = 30 };
+            metaballs[1] = new Metaball { CenterX = 130, CenterY = 50, CenterZ = 50, Radius = 30 };
             //metaballs[2] = new Metaball { CenterX = 350, CenterY = 375, CenterZ = 100, Radius = 20 };
 
             marchingCubeAlgorithm = new MarchingCubeAlgorithm();
-
-            //VertexPositionColor[] vertices = new VertexPositionColor[3];
-            //vertices[0] = new VertexPositionColor(new Vector3(0, 1, 0), Color.Red);
-            //vertices[1] = new VertexPositionColor(new Vector3(+0.5f, 0, 0), Color.Green);
-            //vertices[2] = new VertexPositionColor(new Vector3(-0.5f, 0, 0), Color.Blue);
 
             vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor), 3, BufferUsage.WriteOnly);
             //vertexBuffer.SetData<VertexPositionColor>(vertices);
@@ -124,33 +109,7 @@ namespace Metaballs
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (this.runOnce != true)
-            {
-                for (uint z = 0; z < 100; z++)
-                {
-                    for (uint y = 0; y < 100; y++)
-                    {
-                        for (uint x = 0; x < 100; x++)
-                        {
-                            var index = z * 100 * 100 + y * 100 + x;
-
-                            var sum = this.metaballs.Sum(metaball => this.Calculate(x, y, z, metaball.CenterX, metaball.CenterY, metaball.CenterZ, metaball.Radius));
-
-                            //if (sum >= threshold_min && sum <= threshold_max)
-                            //{
-                                this.pointCloud[index] += sum;
-                            //}
-                        }
-                    }
-                }
-            }
-
-            var amountOfPointsCoveredByIsosurface = this.pointCloud.Count(point => point != 0);
-
-            runOnce = true;
-
             grid.ViewMatrix = view;
-
             base.Update(gameTime);
         }
 
@@ -161,7 +120,7 @@ namespace Metaballs
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            grid.Draw();
+            //grid.Draw();
             basicEffect.World = world;
             basicEffect.View = view;
             basicEffect.Projection = projection;
@@ -175,7 +134,6 @@ namespace Metaballs
 
             Triangle[] triangles;
             
-
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply(); 
@@ -189,18 +147,10 @@ namespace Metaballs
                             var index = z * 10 * 10 + y * 10 + x;
                             var p = 10;
 
+                            var gridLength = 10;
+
                             gridCells[index] = new GridCell();
 
-                            //gridCells[index].point[0] = new Vector3(0, 0, 0);
-                            //gridCells[index].point[1] = new Vector3(10, 0, 0);
-                            //gridCells[index].point[2] = new Vector3(10, 0, 10);
-                            //gridCells[index].point[3] = new Vector3(0, 0, 10);
-                            //gridCells[index].point[4] = new Vector3(0, 10, 0);
-                            //gridCells[index].point[5] = new Vector3(10, 10, 0);
-                            //gridCells[index].point[6] = new Vector3(10, 10, 10);
-                            //gridCells[index].point[7] = new Vector3(0, 10, 10);
-
-                            // Todo: Fix from relative to absolute
                             gridCells[index].point[0] = new Vector3(x*10    , y*10    , z*10);
                             gridCells[index].point[1] = new Vector3(x*10 + p, y*10    , z*10);
                             gridCells[index].point[2] = new Vector3(x*10 + p, y*10    , z*10 + p);
@@ -208,18 +158,47 @@ namespace Metaballs
                             gridCells[index].point[4] = new Vector3(x*10    , y*10 + p, z*10);
                             gridCells[index].point[5] = new Vector3(x*10 + p, y*10 + p, z*10);
                             gridCells[index].point[6] = new Vector3(x*10 + p, y*10 + p, z*10 + p);
-                            gridCells[index].point[7] = new Vector3(x*10    , y*10 + p, z*10 + p);                           // TODO: CHECK CORRECTNESS
-                                                                                                                             // First 10x10 Cube (Relative):     First 10x10 Cube (Absolute):        Second 10x10 Cube (Absolute):        100x100 Point Cloud Cube:
-                                                                                                                             // ===================================================================================================================================
-                            gridCells[index].value[0] = pointCloud[x*10 + y*100*10 + z*100*100*10];                          // 0    (0)                         0       (0)                         10      (10)                         0       (0)                      
-                            gridCells[index].value[1] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9];                      // 9    (0+9)                       9       (0+9)                       19      (10+9)                       99      (0+99)
-                            gridCells[index].value[2] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100 + 9];          // 99   (9*10+9)                    100009  (100*100*10 + 9)            100019  (100*100*10 + 19)            9999    (99*100+99)
-                            gridCells[index].value[3] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100];              // 90   (9*10)                      100000  (100*100*10)                100000  (100*100*10 + 10)            9900    (99*100)
+                            gridCells[index].point[7] = new Vector3(x*10    , y*10 + p, z*10 + p);                           
 
-                            gridCells[index].value[4] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100];                  // 900  (9*10*10)                   1000    (100*10)                    1010    (100*10 + 10)                990000  (99*100*100)
-                            gridCells[index].value[5] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100 + 9];              // 909  (9*10*10+9)                 1009    (100*10 + 9)                1019    (100*10 + 10 + 9)            990099  (99*100*100+99)
-                            gridCells[index].value[6] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100 + 9*100 + 9];  // 999  (9*10*10+9*10+9)            100909  (100*100*10 + 9*100 + 9)    100919  (100*100*10 + 9*100 + 19)    999999  (99*100*100+99*100+99)
-                            gridCells[index].value[7] = pointCloud[x*10 + y*100*10 + z*100*100*10 + 9*100*100 + 9*100];      // 990  (9*10*10+9*10)              100900  (100*100*10 + 9*100)        100910  (100*100*10 + 9*100 + 10)    999900  (99*100*100+99*100)
+                            gridCells[index].value[0] = this.ComputeMetaballs(
+                                gridCells[index].point[0].X,
+                                gridCells[index].point[0].Y,
+                                gridCells[index].point[0].Z);
+
+                            gridCells[index].value[1] = this.ComputeMetaballs(
+                                gridCells[index].point[1].X,
+                                gridCells[index].point[1].Y,
+                                gridCells[index].point[1].Z);
+
+                            gridCells[index].value[2] = this.ComputeMetaballs(
+                                gridCells[index].point[2].X,
+                                gridCells[index].point[2].Y,
+                                gridCells[index].point[2].Z);
+
+                            gridCells[index].value[3] = this.ComputeMetaballs(
+                                gridCells[index].point[3].X,
+                                gridCells[index].point[3].Y,
+                                gridCells[index].point[3].Z);
+
+                            gridCells[index].value[4] = this.ComputeMetaballs(
+                                gridCells[index].point[4].X,
+                                gridCells[index].point[4].Y,
+                                gridCells[index].point[4].Z);
+
+                            gridCells[index].value[5] = this.ComputeMetaballs(
+                                gridCells[index].point[5].X,
+                                gridCells[index].point[5].Y,
+                                gridCells[index].point[5].Z);
+
+                            gridCells[index].value[6] = this.ComputeMetaballs(
+                                gridCells[index].point[6].X,
+                                gridCells[index].point[6].Y,
+                                gridCells[index].point[6].Z);
+
+                            gridCells[index].value[7] = this.ComputeMetaballs(
+                                gridCells[index].point[7].X,
+                                gridCells[index].point[7].Y,
+                                gridCells[index].point[7].Z);
 
                             var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 0.9, out triangles);
 
@@ -246,9 +225,14 @@ namespace Metaballs
             base.Draw(gameTime);
         }
 
-        public double Calculate(uint x, uint y, uint z, uint x0, uint y0, uint z0, uint radius)
+        public double Calculate(double x, double y, double z, double x0, double y0, double z0, double radius)
         {
             return radius / Math.Sqrt(((x - x0) * (x - x0)) + ((y - y0) * (y - y0)) + ((z - z0) * (z - z0)));
+        }
+
+        public double ComputeMetaballs(double x, double y, double z)
+        {
+            return this.metaballs.Sum(metaball => metaball.Radius / Math.Sqrt(((x - metaball.CenterX) * (x - metaball.CenterX)) + ((y - metaball.CenterY) * (y - metaball.CenterY)) + ((z - metaball.CenterZ) * (z - metaball.CenterZ))));
         }
     }
 }
