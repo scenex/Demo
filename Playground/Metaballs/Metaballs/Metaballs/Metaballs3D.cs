@@ -13,12 +13,16 @@ namespace Metaballs
 {
     using System.Threading;
 
+    using VertexLightingSample;
+
     /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class Metaballs3D : Microsoft.Xna.Framework.Game
     {
         private bool runOnce;
+
+        private SampleGrid grid;
 
         //private double threshold_max = 1.02f;
         //private double threshold_min = 0.98f;
@@ -42,7 +46,7 @@ namespace Metaballs
 
         BasicEffect basicEffect;
         Matrix world = Matrix.CreateTranslation(0, 0, 0);
-        Matrix view = Matrix.CreateLookAt(new Vector3(0,0,100), new Vector3(40,40,0), new Vector3(0, 1, 0));
+        Matrix view = Matrix.CreateLookAt(new Vector3(0,100,100), new Vector3(40,40,0), new Vector3(0, 1, 0));
         Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.01f, 500f);
 
         public Metaballs3D()
@@ -68,6 +72,10 @@ namespace Metaballs
         /// </summary>
         protected override void LoadContent()
         {
+            //Set up the reference grid and sample camera
+            grid = new SampleGrid { GridColor = Color.LimeGreen, GridScale = 10.0f, GridSize = 100 };
+            grid.LoadGraphicsContent(graphics.GraphicsDevice);
+
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             basicEffect = new BasicEffect(GraphicsDevice);
@@ -88,6 +96,12 @@ namespace Metaballs
 
             vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor), 3, BufferUsage.WriteOnly);
             //vertexBuffer.SetData<VertexPositionColor>(vertices);
+
+            //grid requires a projection matrix to draw correctly
+            grid.ProjectionMatrix = projection;
+
+            //Set the grid to draw on the x/z plane around the origin
+            grid.WorldMatrix = Matrix.Identity;
         }
 
         /// <summary>
@@ -135,6 +149,7 @@ namespace Metaballs
 
             runOnce = true;
 
+            grid.ViewMatrix = view;
 
             base.Update(gameTime);
         }
@@ -145,8 +160,8 @@ namespace Metaballs
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            GraphicsDevice.Clear(Color.Black);
+            grid.Draw();
             basicEffect.World = world;
             basicEffect.View = view;
             basicEffect.Projection = projection;
