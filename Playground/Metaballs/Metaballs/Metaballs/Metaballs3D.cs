@@ -29,7 +29,7 @@ namespace Metaballs
 
         private MarchingCubeAlgorithm marchingCubeAlgorithm;
 
-        private GridCell[] gridCells = new GridCell[10*10*10];
+        private GridCell[] gridCells = new GridCell[50*50*50];
 
         private double[] pointCloud;
 
@@ -39,7 +39,7 @@ namespace Metaballs
 
         BasicEffect basicEffect;
         Matrix world = Matrix.CreateTranslation(0, 0, 0);
-        Matrix view = Matrix.CreateLookAt(new Vector3(0,200,150), new Vector3(0,0,0), new Vector3(0, 1, 0));
+        Matrix view = Matrix.CreateLookAt(new Vector3(150,100,150), new Vector3(0,0,0), new Vector3(0, 1, 0));
         Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.01f, 500f);
 
         public Metaballs3D()
@@ -73,8 +73,8 @@ namespace Metaballs
             basicEffect = new BasicEffect(GraphicsDevice);
 
             metaballs = new Metaball[2];
-            metaballs[0] = new Metaball { CenterX = 0, CenterY = 50, CenterZ = 50, Radius = 30 };
-            metaballs[1] = new Metaball { CenterX = 130, CenterY = 50, CenterZ = 50, Radius = 30 };
+            metaballs[0] = new Metaball { CenterX = 40, CenterY = 50, CenterZ = 50, Radius = 30 };
+            metaballs[1] = new Metaball { CenterX = 130, CenterY = 60, CenterZ = 70, Radius = 20 };
             //metaballs[2] = new Metaball { CenterX = 350, CenterY = 375, CenterZ = 100, Radius = 20 };
 
             marchingCubeAlgorithm = new MarchingCubeAlgorithm();
@@ -138,27 +138,27 @@ namespace Metaballs
             {
                 pass.Apply(); 
 
-                for (int z = 0; z < 10; z++)
+                for (int z = 0; z < 50; z++)
                 {
-                    for (int y = 0; y < 10; y++)
+                    for (int y = 0; y < 50; y++)
                     {
-                        for (int x = 0; x < 10; x++)
+                        for (int x = 0; x < 50; x++)
                         {
-                            var index = z * 10 * 10 + y * 10 + x;
-                            var p = 10;
-
-                            var gridLength = 10;
+                            var index = z * 50 * 50 + y * 50 + x;
+                            
+                            // Grid edge length 
+                            var g = 5;
 
                             gridCells[index] = new GridCell();
 
-                            gridCells[index].point[0] = new Vector3(x*10    , y*10    , z*10);
-                            gridCells[index].point[1] = new Vector3(x*10 + p, y*10    , z*10);
-                            gridCells[index].point[2] = new Vector3(x*10 + p, y*10    , z*10 + p);
-                            gridCells[index].point[3] = new Vector3(x*10    , y*10    , z*10 + p);
-                            gridCells[index].point[4] = new Vector3(x*10    , y*10 + p, z*10);
-                            gridCells[index].point[5] = new Vector3(x*10 + p, y*10 + p, z*10);
-                            gridCells[index].point[6] = new Vector3(x*10 + p, y*10 + p, z*10 + p);
-                            gridCells[index].point[7] = new Vector3(x*10    , y*10 + p, z*10 + p);                           
+                            gridCells[index].point[0] = new Vector3(x*g    , y*g    , z*g);
+                            gridCells[index].point[1] = new Vector3(x*g + g, y*g    , z*g);
+                            gridCells[index].point[2] = new Vector3(x*g + g, y*g    , z*g + g);
+                            gridCells[index].point[3] = new Vector3(x*g    , y*g    , z*g + g);
+                            gridCells[index].point[4] = new Vector3(x*g    , y*g + g, z*g);
+                            gridCells[index].point[5] = new Vector3(x*g + g, y*g + g, z*g);
+                            gridCells[index].point[6] = new Vector3(x*g + g, y*g + g, z*g + g);
+                            gridCells[index].point[7] = new Vector3(x*g    , y*g + g, z*g + g);                           
 
                             gridCells[index].value[0] = this.ComputeMetaballs(
                                 gridCells[index].point[0].X,
