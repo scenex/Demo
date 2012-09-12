@@ -103,6 +103,31 @@ namespace Metaballs
             basicEffect.Projection = projection;
             basicEffect.VertexColorEnabled = false;
             basicEffect.LightingEnabled = true;
+
+            for (int z = 0; z < 50; z++)
+            {
+                for (int y = 0; y < 50; y++)
+                {
+                    for (int x = 0; x < 50; x++)
+                    {
+                        var index = z * 50 * 50 + y * 50 + x;
+
+                        // Grid edge length 
+                        var g = 5;
+
+                        gridCells[index] = new GridCell();
+
+                        gridCells[index].point[0] = new Vector3(x * g, y * g, z * g);
+                        gridCells[index].point[1] = new Vector3(x * g + g, y * g, z * g);
+                        gridCells[index].point[2] = new Vector3(x * g + g, y * g, z * g + g);
+                        gridCells[index].point[3] = new Vector3(x * g, y * g, z * g + g);
+                        gridCells[index].point[4] = new Vector3(x * g, y * g + g, z * g);
+                        gridCells[index].point[5] = new Vector3(x * g + g, y * g + g, z * g);
+                        gridCells[index].point[6] = new Vector3(x * g + g, y * g + g, z * g + g);
+                        gridCells[index].point[7] = new Vector3(x * g, y * g + g, z * g + g);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -134,31 +159,17 @@ namespace Metaballs
             GraphicsDevice.Clear(Color.Black);
             grid.Draw();
 
-            foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
+            foreach (var pass in basicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
 
-                for (int z = 0; z < 50; z++)
+                for (var z = 0; z < 50; z++)
                 {
-                    for (int y = 0; y < 50; y++)
+                    for (var y = 0; y < 50; y++)
                     {
-                        for (int x = 0; x < 50; x++)
+                        for (var x = 0; x < 50; x++)
                         {
                             var index = z * 50 * 50 + y * 50 + x;
-
-                            // Grid edge length 
-                            var g = 5;
-
-                            gridCells[index] = new GridCell();
-
-                            gridCells[index].point[0] = new Vector3(x * g, y * g, z * g);
-                            gridCells[index].point[1] = new Vector3(x * g + g, y * g, z * g);
-                            gridCells[index].point[2] = new Vector3(x * g + g, y * g, z * g + g);
-                            gridCells[index].point[3] = new Vector3(x * g, y * g, z * g + g);
-                            gridCells[index].point[4] = new Vector3(x * g, y * g + g, z * g);
-                            gridCells[index].point[5] = new Vector3(x * g + g, y * g + g, z * g);
-                            gridCells[index].point[6] = new Vector3(x * g + g, y * g + g, z * g + g);
-                            gridCells[index].point[7] = new Vector3(x * g, y * g + g, z * g + g);
 
                             gridCells[index].value[0] = this.ComputeMetaballsValueAtGivenPoint(
                                 gridCells[index].point[0].X,
