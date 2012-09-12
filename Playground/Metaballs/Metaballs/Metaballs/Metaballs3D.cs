@@ -79,7 +79,7 @@ namespace Metaballs
 
             marchingCubeAlgorithm = new MarchingCubeAlgorithm();
 
-            vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor), 3, BufferUsage.WriteOnly);
+            vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionNormalTexture), 3, BufferUsage.WriteOnly);
             //vertexBuffer.SetData<VertexPositionColor>(vertices);
 
             //grid requires a projection matrix to draw correctly
@@ -124,7 +124,8 @@ namespace Metaballs
             basicEffect.World = world;
             basicEffect.View = view;
             basicEffect.Projection = projection;
-            basicEffect.VertexColorEnabled = true;
+            basicEffect.VertexColorEnabled = false;
+            basicEffect.LightingEnabled = true;
 
             GraphicsDevice.SetVertexBuffer(vertexBuffer);
 
@@ -206,10 +207,10 @@ namespace Metaballs
                             {
                                 for (int i = 0; i < numberOfTriangles; i++)
                                 {
-                                    var vertices = new VertexPositionColor[3];
-                                    vertices[0] = new VertexPositionColor(triangles[i].p[0], Color.Red);
-                                    vertices[1] = new VertexPositionColor(triangles[i].p[1], Color.Green);
-                                    vertices[2] = new VertexPositionColor(triangles[i].p[2], Color.Blue);
+                                    var vertices = new VertexPositionNormalTexture[3];
+                                    vertices[0] = new VertexPositionNormalTexture(triangles[i].p[0], Vector3.Up, Vector2.One);
+                                    vertices[1] = new VertexPositionNormalTexture(triangles[i].p[1], Vector3.Up, Vector2.One);
+                                    vertices[2] = new VertexPositionNormalTexture(triangles[i].p[2], Vector3.Up, Vector2.One);
 
                                     //vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor), 3, BufferUsage.WriteOnly);
                                     //vertexBuffer.SetData<VertexPositionColor>(vertices);
