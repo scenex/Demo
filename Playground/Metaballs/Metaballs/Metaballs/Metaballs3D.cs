@@ -46,6 +46,8 @@ namespace Metaballs
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            this.Components.Add(new FrameRateCounter(this));
         }
 
         /// <summary>
@@ -87,6 +89,16 @@ namespace Metaballs
 
             //Set the grid to draw on the x/z plane around the origin
             grid.WorldMatrix = Matrix.Identity;
+
+            RasterizerState rasterizerState = new RasterizerState();
+            rasterizerState.CullMode = CullMode.None;
+            GraphicsDevice.RasterizerState = rasterizerState;
+
+            basicEffect.World = world;
+            basicEffect.View = view;
+            basicEffect.Projection = projection;
+            basicEffect.VertexColorEnabled = false;
+            basicEffect.LightingEnabled = true;
         }
 
         /// <summary>
@@ -104,11 +116,7 @@ namespace Metaballs
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            //metaballs[0].CenterZ += 1;
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
+            metaballs[0].CenterZ += 0.1;
             grid.ViewMatrix = view;
             base.Update(gameTime);
         }
@@ -120,21 +128,8 @@ namespace Metaballs
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            //grid.Draw();
-            basicEffect.World = world;
-            basicEffect.View = view;
-            basicEffect.Projection = projection;
-            basicEffect.VertexColorEnabled = false;
-            basicEffect.LightingEnabled = true;
+            grid.Draw();
 
-            GraphicsDevice.SetVertexBuffer(vertexBuffer);
-
-            RasterizerState rasterizerState = new RasterizerState();
-            rasterizerState.CullMode = CullMode.None;
-            GraphicsDevice.RasterizerState = rasterizerState;
-
-            Triangle[] triangles;
-            
             foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
             {
                 pass.Apply(); 
@@ -159,7 +154,7 @@ namespace Metaballs
                             gridCells[index].point[4] = new Vector3(x*g    , y*g + g, z*g);
                             gridCells[index].point[5] = new Vector3(x*g + g, y*g + g, z*g);
                             gridCells[index].point[6] = new Vector3(x*g + g, y*g + g, z*g + g);
-                            gridCells[index].point[7] = new Vector3(x*g    , y*g + g, z*g + g);                           
+                            gridCells[index].point[7] = new Vector3(x*g    , y*g + g, z*g + g);
 
                             gridCells[index].value[0] = this.ComputeMetaballs(
                                 gridCells[index].point[0].X,
@@ -201,20 +196,35 @@ namespace Metaballs
                                 gridCells[index].point[7].Y,
                                 gridCells[index].point[7].Z);
 
+                            Triangle[] triangles;
                             var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 0.9, out triangles);
 
                             if (numberOfTriangles > 0)
                             {
                                 for (int i = 0; i < numberOfTriangles; i++)
                                 {
-                                    var vertices = new VertexPositionNormalTexture[3];
-                                    vertices[0] = new VertexPositionNormalTexture(triangles[i].p[0], Vector3.Up, Vector2.One);
-                                    vertices[1] = new VertexPositionNormalTexture(triangles[i].p[1], Vector3.Up, Vector2.One);
-                                    vertices[2] = new VertexPositionNormalTexture(triangles[i].p[2], Vector3.Up, Vector2.One);
+                                    Vector3 normal1;
+                                    Vector3.Cross(ref triangles[i].p[2], ref triangles[i].p[1], out normal1);
+                                    //normal1.Normalize();
 
-                                    //vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionColor), 3, BufferUsage.WriteOnly);
-                                    //vertexBuffer.SetData<VertexPositionColor>(vertices);
-                                    
+                                    Vector3 normal2;
+                                    Vector3.Cross(ref triangles[i].p[1], ref triangles[i].p[0], out normal2);
+                                    //normal2.Normalize();
+
+                                    Vector3 normal3;
+                                    Vector3.Cross(ref triangles[i].p[0], ref triangles[i].p[2], out normal3);
+                                    //normal3.Normalize();
+
+                                    var vertices = new VertexPositionNormalTexture[3];
+                                    vertices[0] = new VertexPositionNormalTexture(triangles[i].p[0], normal1, Vector2.Zero);
+                                    vertices[1] = new VertexPositionNormalTexture(triangles[i].p[1], normal2, Vector2.Zero);
+                                    vertices[2] = new VertexPositionNormalTexture(triangles[i].p[2], normal3, Vector2.Zero);
+
+                                    //vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionNormalTexture), 3, BufferUsage.None);
+                                    //vertexBuffer.SetData(vertices);
+                                    //GraphicsDevice.SetVertexBuffer(vertexBuffer);
+                                    //GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 1);
+
                                     GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
                                 }
                             }
@@ -226,14 +236,9 @@ namespace Metaballs
             base.Draw(gameTime);
         }
 
-        public double Calculate(double x, double y, double z, double x0, double y0, double z0, double radius)
-        {
-            return radius / Math.Sqrt(((x - x0) * (x - x0)) + ((y - y0) * (y - y0)) + ((z - z0) * (z - z0)));
-        }
-
         public double ComputeMetaballs(double x, double y, double z)
         {
-            return this.metaballs.Sum(metaball => metaball.Radius / Math.Sqrt(((x - metaball.CenterX) * (x - metaball.CenterX)) + ((y - metaball.CenterY) * (y - metaball.CenterY)) + ((z - metaball.CenterZ) * (z - metaball.CenterZ))));
+            return this.metaballs.Sum(metaball => metaball.Radius / Math.Sqrt(((x - metaball.CenterX) * (x - metaball.CenterX)) + ((y - metaball.CenterY) * (y - metaball.CenterY)) + ((z - metaball.CenterZ) * (z - metaball.CenterZ))));   
         }
     }
 }

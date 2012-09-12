@@ -107,6 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FramerateCounter.cs" />
     <Compile Include="GridCell.cs" />
     <Compile Include="MarchingCubeAlgorithm.cs" />
     <Compile Include="Metaball.cs" />

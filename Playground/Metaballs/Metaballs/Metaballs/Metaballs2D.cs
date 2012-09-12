@@ -130,7 +130,7 @@ namespace Metaballs
             base.Draw(gameTime);
         }
 
-        public double Calculate(uint x, uint y, uint x0, uint y0, uint radius)
+        public double Calculate(double x, double y, double x0, double y0, double radius)
         {
             return radius / Math.Sqrt(((x - x0) * (x - x0)) + ((y - y0) * (y - y0)));
         }

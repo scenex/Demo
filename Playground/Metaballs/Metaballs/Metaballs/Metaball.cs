@@ -8,12 +8,12 @@ namespace Metaballs
 {
     public class Metaball
     {
-        public uint CenterX { get; set; }
+        public double CenterX { get; set; }
 
-        public uint CenterY { get; set; }
+        public double CenterY { get; set; }
 
-        public uint CenterZ { get; set; }
+        public double CenterZ { get; set; }
 
-        public uint Radius { get; set; }
+        public double Radius { get; set; }
     }
 }
