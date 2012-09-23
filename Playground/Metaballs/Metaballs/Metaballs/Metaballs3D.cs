@@ -103,6 +103,9 @@ namespace Metaballs
             basicEffect.Projection = projection;
             basicEffect.VertexColorEnabled = false;
             basicEffect.LightingEnabled = true;
+            basicEffect.EnableDefaultLighting();
+            basicEffect.PreferPerPixelLighting = true;
+            basicEffect.AmbientLightColor = new Vector3(0.2f, 0.1f, 0.7f);
 
             for (int z = 0; z < 50; z++)
             {
@@ -218,22 +221,17 @@ namespace Metaballs
                             {
                                 for (int i = 0; i < numberOfTriangles; i++)
                                 {
-                                    Vector3 normal1;
-                                    Vector3.Cross(ref triangles[i].p[2], ref triangles[i].p[1], out normal1);
-                                    //normal1.Normalize();
+                                    Vector3 vector1 = triangles[i].p[1] - triangles[i].p[0];
+                                    Vector3 vector2 = triangles[i].p[2] - triangles[i].p[0];
+                                    Vector3 normal;
 
-                                    Vector3 normal2;
-                                    Vector3.Cross(ref triangles[i].p[1], ref triangles[i].p[0], out normal2);
-                                    //normal2.Normalize();
-
-                                    Vector3 normal3;
-                                    Vector3.Cross(ref triangles[i].p[0], ref triangles[i].p[2], out normal3);
-                                    //normal3.Normalize();
+                                    Vector3.Cross(ref vector1, ref vector2, out normal);
+                                    normal.Normalize();
 
                                     var vertices = new VertexPositionNormalTexture[3];
-                                    vertices[0] = new VertexPositionNormalTexture(triangles[i].p[0], normal1, Vector2.Zero);
-                                    vertices[1] = new VertexPositionNormalTexture(triangles[i].p[1], normal2, Vector2.Zero);
-                                    vertices[2] = new VertexPositionNormalTexture(triangles[i].p[2], normal3, Vector2.Zero);
+                                    vertices[0] = new VertexPositionNormalTexture(triangles[i].p[0], normal, Vector2.Zero);
+                                    vertices[1] = new VertexPositionNormalTexture(triangles[i].p[1], normal, Vector2.Zero);
+                                    vertices[2] = new VertexPositionNormalTexture(triangles[i].p[2], normal, Vector2.Zero);
 
                                     //vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionNormalTexture), 3, BufferUsage.None);
                                     //vertexBuffer.SetData(vertices);
