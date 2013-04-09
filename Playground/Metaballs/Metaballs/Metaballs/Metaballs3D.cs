@@ -11,6 +11,8 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Metaballs
 {
+    using System.Collections.Generic;
+
     using VertexLightingSample;
 
     /// <summary>
@@ -22,12 +24,15 @@ namespace Metaballs
 
         private SampleGrid grid;
 
-        //private double threshold_max = 1.02f;
-        //private double threshold_min = 0.98f;
+        private double threshold_max = 1.2f;
+        private double threshold_min = 0.8f;
         
-        private double threshold_min = 0.7f;
-        private double threshold_max = 10.2f;
-     
+        //private double threshold_min = 0.7f;
+        //private double threshold_max = 10.2f;
+
+        private int frameCounter = 0;
+
+        private readonly Dictionary<int, VertexPositionNormalTexture[]> verticesDictionary = new Dictionary<int, VertexPositionNormalTexture[]>();
 
         private Metaball[] metaballs;
 
@@ -43,8 +48,10 @@ namespace Metaballs
 
         BasicEffect basicEffect;
         Matrix world = Matrix.CreateTranslation(0, 0, 0);
-        Matrix view = Matrix.CreateLookAt(new Vector3(150,100,150), new Vector3(0,0,0), new Vector3(0, 1, 0));
+        Matrix view = Matrix.CreateLookAt(new Vector3(300,100,150), new Vector3(0,0,0), new Vector3(0, 1, 0));
         Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45), 800f / 480f, 0.01f, 500f);
+
+        private bool isPrecalced;
 
         public Metaballs3D()
         {
@@ -79,9 +86,9 @@ namespace Metaballs
             basicEffect = new BasicEffect(GraphicsDevice);
 
             metaballs = new Metaball[2];
-            metaballs[0] = new Metaball { CenterX = 40, CenterY = 50, CenterZ = 50, Radius = 30 };
-            metaballs[1] = new Metaball { CenterX = 130, CenterY = 60, CenterZ = 70, Radius = 20 };
-            //metaballs[2] = new Metaball { CenterX = 350, CenterY = 375, CenterZ = 100, Radius = 20 };
+            metaballs[0] = new Metaball { CenterX = 60, CenterY = 60, CenterZ = 50, Radius = 40 };
+            metaballs[1] = new Metaball { CenterX = 130, CenterY = 60, CenterZ = 70, Radius = 40 };
+           // metaballs[2] = new Metaball { CenterX = 150, CenterY = 75, CenterZ = 100, Radius = 20 };
 
             marchingCubeAlgorithm = new MarchingCubeAlgorithm();
 
@@ -159,13 +166,10 @@ namespace Metaballs
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
-            grid.Draw();
+            var verticesList = new List<VertexPositionNormalTexture>();
 
-            foreach (var pass in basicEffect.CurrentTechnique.Passes)
+            if (frameCounter < 60)
             {
-                pass.Apply();
-
                 for (var z = 0; z < 50; z++)
                 {
                     for (var y = 0; y < 50; y++)
@@ -174,48 +178,57 @@ namespace Metaballs
                         {
                             var index = z * 50 * 50 + y * 50 + x;
 
-                            gridCells[index].value[0] = this.ComputeMetaballsValueAtGivenPoint(
-                                gridCells[index].point[0].X,
-                                gridCells[index].point[0].Y,
-                                gridCells[index].point[0].Z);
+                            gridCells[index].value[0] =
+                                this.ComputeMetaballsValueAtGivenPoint(
+                                    gridCells[index].point[0].X,
+                                    gridCells[index].point[0].Y,
+                                    gridCells[index].point[0].Z);
 
-                            gridCells[index].value[1] = this.ComputeMetaballsValueAtGivenPoint(
-                                gridCells[index].point[1].X,
-                                gridCells[index].point[1].Y,
-                                gridCells[index].point[1].Z);
+                            gridCells[index].value[1] =
+                                this.ComputeMetaballsValueAtGivenPoint(
+                                    gridCells[index].point[1].X,
+                                    gridCells[index].point[1].Y,
+                                    gridCells[index].point[1].Z);
 
-                            gridCells[index].value[2] = this.ComputeMetaballsValueAtGivenPoint(
-                                gridCells[index].point[2].X,
-                                gridCells[index].point[2].Y,
-                                gridCells[index].point[2].Z);
+                            gridCells[index].value[2] =
+                                this.ComputeMetaballsValueAtGivenPoint(
+                                    gridCells[index].point[2].X,
+                                    gridCells[index].point[2].Y,
+                                    gridCells[index].point[2].Z);
 
-                            gridCells[index].value[3] = this.ComputeMetaballsValueAtGivenPoint(
-                                gridCells[index].point[3].X,
-                                gridCells[index].point[3].Y,
-                                gridCells[index].point[3].Z);
+                            gridCells[index].value[3] =
+                                this.ComputeMetaballsValueAtGivenPoint(
+                                    gridCells[index].point[3].X,
+                                    gridCells[index].point[3].Y,
+                                    gridCells[index].point[3].Z);
 
-                            gridCells[index].value[4] = this.ComputeMetaballsValueAtGivenPoint(
-                                gridCells[index].point[4].X,
-                                gridCells[index].point[4].Y,
-                                gridCells[index].point[4].Z);
+                            gridCells[index].value[4] =
+                                this.ComputeMetaballsValueAtGivenPoint(
+                                    gridCells[index].point[4].X,
+                                    gridCells[index].point[4].Y,
+                                    gridCells[index].point[4].Z);
 
-                            gridCells[index].value[5] = this.ComputeMetaballsValueAtGivenPoint(
-                                gridCells[index].point[5].X,
-                                gridCells[index].point[5].Y,
-                                gridCells[index].point[5].Z);
+                            gridCells[index].value[5] =
+                                this.ComputeMetaballsValueAtGivenPoint(
+                                    gridCells[index].point[5].X,
+                                    gridCells[index].point[5].Y,
+                                    gridCells[index].point[5].Z);
 
-                            gridCells[index].value[6] = this.ComputeMetaballsValueAtGivenPoint(
-                                gridCells[index].point[6].X,
-                                gridCells[index].point[6].Y,
-                                gridCells[index].point[6].Z);
+                            gridCells[index].value[6] =
+                                this.ComputeMetaballsValueAtGivenPoint(
+                                    gridCells[index].point[6].X,
+                                    gridCells[index].point[6].Y,
+                                    gridCells[index].point[6].Z);
 
-                            gridCells[index].value[7] = this.ComputeMetaballsValueAtGivenPoint(
-                                gridCells[index].point[7].X,
-                                gridCells[index].point[7].Y,
-                                gridCells[index].point[7].Z);
+                            gridCells[index].value[7] =
+                                this.ComputeMetaballsValueAtGivenPoint(
+                                    gridCells[index].point[7].X,
+                                    gridCells[index].point[7].Y,
+                                    gridCells[index].point[7].Z);
 
                             Triangle[] triangles;
-                            var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(gridCells[index], 0.9, out triangles);
+                            var numberOfTriangles = this.marchingCubeAlgorithm.Polygonise(
+                                gridCells[index], 1.0, out triangles);
 
                             if (numberOfTriangles > 0)
                             {
@@ -229,21 +242,49 @@ namespace Metaballs
                                     normal.Normalize();
 
                                     var vertices = new VertexPositionNormalTexture[3];
-                                    vertices[0] = new VertexPositionNormalTexture(triangles[i].p[0], normal, Vector2.Zero);
-                                    vertices[1] = new VertexPositionNormalTexture(triangles[i].p[1], normal, Vector2.Zero);
-                                    vertices[2] = new VertexPositionNormalTexture(triangles[i].p[2], normal, Vector2.Zero);
+                                    vertices[0] = new VertexPositionNormalTexture(
+                                        triangles[i].p[0], normal, Vector2.Zero);
+                                    vertices[1] = new VertexPositionNormalTexture(
+                                        triangles[i].p[1], normal, Vector2.Zero);
+                                    vertices[2] = new VertexPositionNormalTexture(
+                                        triangles[i].p[2], normal, Vector2.Zero);
 
                                     //vertexBuffer = new VertexBuffer(GraphicsDevice, typeof(VertexPositionNormalTexture), 3, BufferUsage.None);
                                     //vertexBuffer.SetData(vertices);
                                     //GraphicsDevice.SetVertexBuffer(vertexBuffer);
                                     //GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, 1);
 
-                                    // TODO: Move out from FOR loop -> do draw batching
-                                    GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
+
+                                    verticesList.Add(vertices[0]);
+                                    verticesList.Add(vertices[1]);
+                                    verticesList.Add(vertices[2]);
                                 }
                             }
                         }
                     }
+                }
+
+                // End Frame
+                this.verticesDictionary.Add(frameCounter, verticesList.ToArray());
+                this.frameCounter++;
+            }
+            else
+            {
+                this.isPrecalced = true;
+            }
+
+
+            if (this.isPrecalced)
+            {
+                frameCounter++;
+
+                GraphicsDevice.Clear(Color.Black);
+                grid.Draw();
+
+                foreach (var pass in basicEffect.CurrentTechnique.Passes)
+                {
+                    pass.Apply();
+                    GraphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, verticesDictionary[frameCounter % 60], 0, verticesDictionary[frameCounter % 60].Count() / 3);
                 }
             }
 
@@ -252,7 +293,12 @@ namespace Metaballs
 
         public double ComputeMetaballsValueAtGivenPoint(double x, double y, double z)
         {
-            return this.metaballs.Sum(metaball => metaball.Radius / Math.Sqrt(((x - metaball.CenterX) * (x - metaball.CenterX)) + ((y - metaball.CenterY) * (y - metaball.CenterY)) + ((z - metaball.CenterZ) * (z - metaball.CenterZ))));   
+            var value = this.metaballs.Sum(metaball => metaball.Radius / Math.Sqrt(((x - metaball.CenterX) * (x - metaball.CenterX)) + ((y - metaball.CenterY) * (y - metaball.CenterY)) + ((z - metaball.CenterZ) * (z - metaball.CenterZ))));   
+            if((value > threshold_min) && (value < threshold_max))
+            {
+                return value;
+            }
+            return 0;
         }
     }
 }
